@@ -1,0 +1,57 @@
+@import "tailwindcss/base";
+@import "tailwindcss/components";
+@import "tailwindcss/utilities";
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+li {
+  list-style: none;
+}
+
+#root {
+  width: 100vw;
+  height: 100vh;
+  overflow: hidden;
+}
+
+.flex-side-center {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.flex-center-center {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.flex-around-center {
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+}
+
+.primary-font {
+  color: #1890ff;
+}
+
+.hover-font {
+  color: #40a9ff;
+}
+
+.active-font {
+  color: #096dd9;
+}
+
+.ant-col-4_8 {
+  flex: 0 0 20%;
+}
+
+.pointer {
+  cursor: pointer;
+}

@@ -1,0 +1,16 @@
+.discover {
+  position: relative;
+  overflow: hidden;
+  .ant-tabs-tab-active {
+    font-weight: bold !important;
+    font-size: 21px !important;
+  }
+}
+
+#tab > div:nth-child(1) {
+  margin: 0;
+}
+
+#tab > div:nth-child(2) {
+  overflow: hidden auto;
+}

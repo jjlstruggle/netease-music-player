@@ -1,0 +1,155 @@
+.player {
+  height: 7vh;
+  display: flex;
+  user-select: none;
+  .name {
+    font-size: 18px;
+    display: flex;
+    align-items: center;
+    position: relative;
+    span {
+      margin-right: 5px;
+      display: inline-block;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      word-wrap: break-word;
+    }
+    div {
+      position: absolute;
+      opacity: 0;
+    }
+  }
+  div {
+    .player-process {
+      display: flex;
+      align-items: center;
+      position: absolute;
+      left: 50%;
+      transform: translateX(-50%);
+    }
+
+    .process {
+      height: 3px;
+      width: 600px;
+      background-color: #e5e5e5;
+      margin: 0 8px;
+      border-radius: 3px;
+      position: relative;
+    }
+
+    .ctime,
+    .atime {
+      font-size: 14px;
+      color: #c2c2c2;
+    }
+
+    .process > span {
+      background-color: #51b8eb;
+      position: absolute;
+      transition: width 0.2s;
+      height: 100%;
+    }
+    #controller {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      div {
+        margin: 0 21px;
+      }
+      .play-mode,
+      .music-lyric {
+        font-size: 21px;
+      }
+      .last-music,
+      .next-music {
+        font-size: 27px;
+      }
+      .play-control {
+        font-size: 32px;
+      }
+    }
+  }
+}
+
+.player > div:nth-child(1) {
+  height: 100%;
+  width: 25%;
+  display: flex;
+  align-items: center;
+  img {
+    width: 7vh;
+    height: 7vh;
+    margin-right: 15px;
+  }
+}
+.player > div:nth-child(2) {
+  width: 50%;
+  height: 100%;
+}
+.player > div:nth-child(3) {
+  width: 25%;
+}
+
+.player-others {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  font-size: 21px;
+}
+
+#toneQuality {
+  border-radius: 1px;
+  border: 1px solid #51b8eb;
+  padding: 0 5px;
+  font-weight: 600;
+  font-size: 16px;
+  margin: 0 12px;
+}
+
+.player-others > span {
+  margin: 0 16px;
+}
+
+.volume-box {
+  transform: translateY(9999px);
+  padding: 10px 45%;
+  width: 100%;
+  position: absolute;
+  background-color: #ffffff;
+  box-shadow: #51b8eb 0 0 5px;
+  height: 100px;
+  visibility: hidden;
+  transition: all 0.2s;
+  .volume-process-box {
+    display: block;
+    width: 100%;
+    height: 100%;
+    border: 1px solid #c1cacf;
+    border-radius: 15px;
+    transform: rotate(180deg);
+  }
+  .volume-process {
+    display: block;
+    height: 100%;
+    background-color: #51b8eb;
+    transition: height 0.3s;
+  }
+}
+
+#volume:hover .volume-box {
+  transform: translateY(-135px);
+  visibility: unset !important;
+}
+
+.volume-box:hover {
+  visibility: unset !important;
+}
+
+#volume {
+  position: relative;
+}
+
+#volume > span {
+  margin: 0 16px;
+}

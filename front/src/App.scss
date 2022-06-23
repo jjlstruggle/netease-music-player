@@ -1,0 +1,83 @@
+.logo {
+  display: flex;
+  align-items: center;
+  margin-right: 120px;
+  img {
+    width: 40px;
+    height: 40px;
+    border-radius: 40px;
+    margin-right: 15px;
+  }
+  div {
+    font-size: 23px;
+    font-family: Garamond, serif;
+    color: #fff;
+  }
+}
+
+.go {
+  font-size: 23px;
+
+  span {
+    padding: 4px;
+    background-color: #e6fffb;
+    border-radius: 20px;
+    margin: 0 5px;
+    color: #fff;
+    :hover {
+      color: #1890ff;
+    }
+  }
+}
+
+.search {
+  margin: 0 30px;
+  width: 320px !important;
+  border-radius: 20px !important;
+  background-color: #e6fffb !important;
+
+  input {
+    background-color: #e6fffb;
+  }
+}
+
+.settings {
+  font-size: 24px;
+  color: #fff;
+  display: flex;
+  align-items: center;
+  .name {
+    font-size: 15px;
+    span {
+      margin: 0 3px;
+    }
+  }
+  div {
+    margin: 0 16px;
+  }
+}
+
+.create {
+  span {
+    margin: 0 5px;
+  }
+}
+
+.home {
+  .ant-menu-item-selected {
+    font-weight: bold !important;
+    font-size: 18px;
+    span {
+      transition: all 0.2s;
+    }
+  }
+}
+
+#content {
+  overflow: hidden;
+}
+
+.header {
+  -webkit-app-region: drag;
+  user-select: none;
+}
