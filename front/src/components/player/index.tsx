@@ -10,7 +10,8 @@ import {
   DownloadOutlined,
   SoundOutlined,
   MenuOutlined,
-  TeamOutlined,
+  BackwardOutlined,
+  ForwardOutlined,
 } from "@ant-design/icons";
 import "./index.less";
 import { MutableRefObject, useEffect, useRef, useState } from "react";
@@ -21,7 +22,6 @@ function Player({ currentMusicInfo }: any) {
   const [ctime, setCTime] = useState("00:00");
   const [atime, setATime] = useState("00:00");
   const [isPause, setIsPause] = useState(true);
-  const fake: MutableRefObject<HTMLDivElement | null> = useRef(null);
   const playAllProcess: MutableRefObject<HTMLDivElement | null> = useRef(null);
   const volumeAllProcess: MutableRefObject<HTMLDivElement | null> =
     useRef(null);
@@ -30,7 +30,6 @@ function Player({ currentMusicInfo }: any) {
 
   let canMove: boolean;
   useEffect(() => {
-    canMove = fake.current!.clientHeight > 160;
     function whenPlay() {
       setIsPause(false);
       setATime(parseDt(currentMusicInfo.dt / 1000));
@@ -51,29 +50,7 @@ function Player({ currentMusicInfo }: any) {
     window.$audio.addEventListener("pause", whenPause);
 
     window.$audio.addEventListener("timeupdate", whenTimeUpdate);
-    playAllProcess.current!.addEventListener("mousedown", (event) => {
-      let rate =
-        (event.clientX - playAllProcess.current!.getBoundingClientRect().left) /
-        playAllProcess.current!.clientWidth;
 
-      window.$audio.currentTime = window.$audio.duration * rate;
-      document.onmousemove = (event) => {
-        let rate =
-          (event.clientX -
-            playAllProcess.current!.getBoundingClientRect().left) /
-          playAllProcess.current!.clientWidth;
-
-        window.$audio.currentTime = window.$audio.duration * rate;
-      };
-    });
-    playAllProcess.current!.addEventListener("mouseup", () => {
-      document.onmousemove = null;
-    });
-    document.onmouseup = () => {
-      if (document.onmousemove) {
-        document.onmousemove = null;
-      }
-    };
     return () => {
       window.$audio.removeEventListener("pause", whenPause);
 
@@ -84,73 +61,42 @@ function Player({ currentMusicInfo }: any) {
   }, [currentMusicInfo]);
   return (
     <div className="player flex select-none relative">
-      <div
-        style={{
-          visibility:
-            JSON.stringify(currentMusicInfo) === "{}" ? "hidden" : "unset",
-        }}
-      >
+      <div>
         <img
-          src={currentMusicInfo.al ? currentMusicInfo.al.picUrl : ""}
+          src="https://www.mooyuu.com/uploadfile/2021/1011/thumb_1000_0_20211011032316905.png"
           alt="请尝试刷新"
         />
         <div>
-          <div className="name">
-            <div ref={fake}>{currentMusicInfo.name || ""}</div>
-            <span style={{ maxWidth: 160 }} className="marquee">
-              {currentMusicInfo.name || ""}
-            </span>
-            <HeartOutlined />
+          <div className="text-lg">
+            <div className="text-sm mr-2 mb-1">痛失吾爱，满目破败</div>
           </div>
-          <div>{handleAr(currentMusicInfo.ar || [])}</div>
+          <div className="text-xs">佛耶戈</div>
         </div>
       </div>
-      <div className="player-info">
-        <div id="controller">
-          <div className="play-mode">
-            <MenuUnfoldOutlined />
-          </div>
-          <div className="last-music">
-            <StepBackwardOutlined />
-          </div>
-          <div
-            className="play-control"
-            onClick={() => {
-              if (window.$audio.src) {
-                if (window.$audio.paused) {
-                  window.$audio.play();
-                } else {
-                  window.$audio.pause();
-                }
-                setIsPause(!isPause);
-              }
-            }}
-          >
-            {isPause ? <CaretRightOutlined /> : <PauseOutlined />}
-          </div>
-          <div className="next-music">
-            <StepForwardOutlined />
-          </div>
-          <div className="music-lyric">
-            <span>词</span>
-          </div>
-        </div>
+      <div className="power-info">POWERED BY SAGA</div>
+      <div className="h-full items-center flex text-xl mr-8 ml-8">
+        <HeartOutlined />
       </div>
-      <div
-        className="player-others"
-        style={currentMusicInfo.name ? {} : { visibility: "hidden" }}
-      >
-        <div id={"toneQuality"}>标准</div>
+      <div className="h-full items-center flex text-xl text-white mr-6 ml-6">
+        <SuiJiIcon />
+      </div>
+      <div className="h-full items-center flex text-3xl mr-5 ml-5">
+        <BackwardOutlined />
+      </div>
+      <div className="h-full items-center flex text-3xl mr-5 ml-5">
+        <PauseOutlined />
+      </div>
+      <div className="h-full items-center flex text-3xl mr-5 ml-5">
+        <ForwardOutlined />
+      </div>
+      <div className="h-full items-center flex text-xl mr-6 ml-6">
         <DownloadOutlined />
-        <div id="volume">
-          <SoundOutlined />
-          <div className={"volume-box"}>
-            <span className={"volume-process-box"} ref={volumeAllProcess}>
-              <span className={"volume-process"} ref={volumeProcess} />
-            </span>
-          </div>
-        </div>
-        <TeamOutlined />
+      </div>
+      <div className="h-full items-center flex text-xl mr-6 ml-6">
+        <SoundOutlined />
+      </div>
+
+      <div className="h-full items-center flex text-xl mr-6 ml-6">
         <MenuOutlined />
       </div>
     </div>

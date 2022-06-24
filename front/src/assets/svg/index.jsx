@@ -99,7 +99,7 @@ const Share = () => (
   </svg>
 );
 
-const Loop = (
+const Loop = () => (
   <svg
     t="1640706197162"
     viewBox="0 0 1024 1024"
@@ -115,12 +115,13 @@ const Loop = (
   </svg>
 );
 
-const SuiJi = (
+const SuiJi = () => (
   <svg
     t="1640706354057"
+    width="1em"
+    height="1em"
+    fill="currentColor"
     viewBox="0 0 1024 1024"
-    version="1.1"
-    xmlns="http://www.w3.org/2000/svg"
     p-id="2472"
   >
     <path
@@ -130,7 +131,7 @@ const SuiJi = (
   </svg>
 );
 
-const HeartBeat = (
+const HeartBeat = () => (
   <svg
     t="1640706459871"
     viewBox="0 0 1024 1024"
@@ -157,9 +158,7 @@ export const MyCollectIcon = (props) => (
   <Icon component={MyCollect} {...props} />
 );
 
-export const SanJiaoIcon = (props) => (
-  <Icon component={SanJiao} {...props} className="ant-menu-item-icon" />
-);
+export const SanJiaoIcon = (props) => <Icon component={SanJiao} {...props} />;
 
 export const AtIcon = (props) => (
   <Icon component={At} {...props} className="ant-menu-item-icon" />
@@ -173,9 +172,7 @@ export const LoopIcon = (props) => (
   <Icon component={Loop} {...props} className="ant-menu-item-icon" />
 );
 
-export const SuiJiIcon = (props) => (
-  <Icon component={SuiJi} {...props} className="ant-menu-item-icon" />
-);
+export const SuiJiIcon = (props) => <Icon component={SuiJi} {...props} />;
 
 export const HeartBeatIcon = (props) => (
   <Icon component={HeartBeat} {...props} className="ant-menu-item-icon" />

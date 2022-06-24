@@ -1,14 +1,11 @@
+.ant-layout-footer {
+  @apply px-8 py-4;
+}
+
 .player {
-  
   height: 7vh;
-  .name {
-    @apply text-lg flex items-center relative;
-    span {
-      @apply mr-1 inline-block truncate break-all;
-    }
-    div {
-      @apply absolute text-opacity-0;
-    }
+  .power-info {
+    @apply border-t border-b border-t-white border-b-white flex items-center justify-center px-4 flex-1 mr-20;
   }
   div {
     .player-process {
@@ -57,51 +54,7 @@
     @apply mr-4;
   }
 }
-.player > div:nth-child(2) {
-  @apply h-full w-1/2;
-}
-.player > div:nth-child(3) {
-  @apply w-1/4;
-}
-
-.player-others {
-  @apply flex justify-end items-center text-xl;
-}
 
 #toneQuality {
   @apply rounded-sm border border-blue-400 px-2 font-semibold text-base mx-3;
-}
-
-.player-others > span {
-  @apply mx-4;
-}
-
-.volume-box {
-  @apply absolute bg-white h-24 w-full transition-all duration-200 invisible ;
-  transform: translateY(9999px);
-  padding: 10px 45%;
-  box-shadow: #51b8eb 0 0 5px;
-  .volume-process-box {
-    @apply block w-full h-full rounded-2xl rotate-180 border border-gray-300;
-  }
-  .volume-process {
-    @apply block h-full bg-blue-400 transition-height duration-300;
-  }
-}
-
-#volume:hover .volume-box {
-  transform: translateY(-135px);
-  visibility: unset !important;
-}
-
-.volume-box:hover {
-  visibility: unset !important;
-}
-
-#volume {
-  @apply relative;
-}
-
-#volume > span {
-  @apply mx-4;
 }
