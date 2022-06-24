@@ -8,6 +8,11 @@
   overflow: hidden;
 }
 
+#page-background {
+  background: url("./assets/img/back.jpg") center no-repeat;
+  background-size: 100% 100%;
+}
+
 .flex-side-center {
   display: flex;
   justify-content: space-between;

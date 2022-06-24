@@ -9,9 +9,11 @@ import "./apis";
 window["$audio"] = new Audio();
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
-  <Provider store={store}>
-    <BrowserRouter>
-      <App />
-    </BrowserRouter>
-  </Provider>
+  <div className="w-full h-full overflow-hidden flex" id="page-background">
+    <Provider store={store}>
+      <BrowserRouter>
+        <App />
+      </BrowserRouter>
+    </Provider>
+  </div>
 );

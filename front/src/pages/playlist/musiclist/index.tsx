@@ -7,11 +7,11 @@ import {
   PlayerActions,
 } from "../../../interface";
 import { Table, Input, Space, Button, InputRef } from "antd";
-import { useEffect, useRef, useState, MutableRefObject, Ref } from "react";
+import { useEffect, useRef, useState, Ref } from "react";
 import { connect } from "react-redux";
-import "./index.scss";
+import "./index.less";
 import { fomate, handleAr, parseDt } from "../../../utils";
-import Highlighter from "react-highlight-words";
+
 import {
   SearchOutlined,
   HeartOutlined,
@@ -22,6 +22,9 @@ import {
   updateSongs as $updateSongs,
   updateCurrentMusicInfo as $updateCurrentMusicInfo,
 } from "../../../models/reducers/player";
+import useLazy from "src/hooks/useLazy";
+
+const LazyHightLight = useLazy(import("react-highlight-words"));
 
 interface musicIdsObject {
   id: string;
@@ -116,7 +119,7 @@ function Musiclist({
       }
     },
     render: (text: string) => (
-      <Highlighter
+      <LazyHightLight
         highlightStyle={{ backgroundColor: "#ffc069", padding: 0 }}
         searchWords={[search.searchText]}
         autoEscape

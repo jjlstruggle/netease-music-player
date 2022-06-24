@@ -12,7 +12,7 @@ import {
   MenuOutlined,
   TeamOutlined,
 } from "@ant-design/icons";
-import "./index.scss";
+import "./index.less";
 import { MutableRefObject, useEffect, useRef, useState } from "react";
 import { LoopIcon, SuiJiIcon, HeartBeatIcon } from "../../assets/svg";
 import { ReduxState } from "../../interface";
@@ -86,7 +86,7 @@ function Player({ currentMusicInfo }: any) {
     };
   }, [currentMusicInfo]);
   return (
-    <div className="player flex select-none">
+    <div className="player flex select-none relative">
       <div
         style={{
           visibility:

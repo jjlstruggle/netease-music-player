@@ -1,4 +1,4 @@
-import "./index.scss";
+import "./index.less";
 
 export default function Musician() {
   return <div>5</div>;

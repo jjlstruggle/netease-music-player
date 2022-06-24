@@ -16,7 +16,7 @@ import {
   CaretUpOutlined,
   CaretDownOutlined,
 } from "@ant-design/icons";
-import "./index.scss";
+import "./index.less";
 import { PlaylistDetailInfo } from "../../interface";
 import { handleCount, handleTag, parseTime } from "../../utils";
 import Musiclist from "./musiclist";

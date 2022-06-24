@@ -1,5 +1,5 @@
 import { Tabs } from "antd";
-import "./index.scss";
+import "./index.less";
 import { useCallback, useEffect, useState } from "react";
 import useLazy from "src/hooks/useLazy";
 import { Route, Routes, Navigate, useNavigate } from "react-router-dom";
@@ -39,12 +39,12 @@ export default function Discover() {
         ))}
       </Tabs>
       <Routes>
-        <Route element={Recommand} path="/recommand"></Route>
-        <Route element={CustomMade} path="/customMade"></Route>
-        <Route element={Playlist} path="/playlist"></Route>
-        <Route element={List} path="/list"></Route>
-        <Route element={Musician} path="/musician"></Route>
-        <Route element={NewMusic} path="/newMusic"></Route>
+        <Route element={<Recommand />} path="/recommand"></Route>
+        <Route element={<CustomMade />} path="/customMade"></Route>
+        <Route element={<Playlist />} path="/playlist"></Route>
+        <Route element={<List />} path="/list"></Route>
+        <Route element={<Musician />} path="/musician"></Route>
+        <Route element={<NewMusic />} path="/newMusic"></Route>
         <Route
           path="*"
           element={<Navigate to="/home/discover/recommand" />}

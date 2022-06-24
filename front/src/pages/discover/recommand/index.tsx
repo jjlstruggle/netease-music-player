@@ -1,4 +1,4 @@
-import "./index.scss";
+import "./index.less";
 import {
   getBanner,
   getMv,
@@ -45,12 +45,11 @@ export default function Recommand() {
       >
         {banner.map((item: { imageUrl: string }, index) => {
           return (
-            <div className="overflow-hidden rounded-lg h-60">
+            <div className="overflow-hidden rounded-lg h-60" key={index}>
               <img
                 src={item.imageUrl}
                 className="h-full w-full"
                 alt="图片加载失败"
-                key={index}
               />
             </div>
           );

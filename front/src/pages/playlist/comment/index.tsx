@@ -1,4 +1,4 @@
-import "./index.scss";
+import "./index.less";
 import { ChangeEvent, useEffect, useState } from "react";
 import { Input, Button, Tooltip, Avatar } from "antd";
 import { AtIcon } from "../../../assets/svg";

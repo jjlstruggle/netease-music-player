@@ -1,4 +1,4 @@
-import "./App.scss";
+import "./App.less";
 import logo from "./assets/img/logo.png";
 import { Layout, Menu, Input, Divider, Modal } from "antd";
 import {
@@ -83,15 +83,13 @@ const Home = ({ playlist }: { playlist: string[] }) => {
     [playlist]
   );
   return (
-    <Layout style={{ flex: 1 }} className="home">
+    <Layout className="home flex-1">
       <Sider width={200} className="border-b border-b-slate-300">
         <Menu
+          className="h-full overflow-x-hidden overflow-y-auto"
           defaultSelectedKeys={["1"]}
           defaultOpenKeys={["sub1"]}
           mode="inline"
-          style={{
-            height: "100%",
-          }}
           items={items}
         />
       </Sider>
@@ -107,7 +105,7 @@ const Home = ({ playlist }: { playlist: string[] }) => {
             <Route path="/focus"></Route>
             <Route path="/live"></Route>
             <Route path="/privateFm"></Route>
-            <Route path="/playlist" element={LazyPlayList}></Route>
+            <Route path="/playlist" element={<LazyPlayList />}></Route>
             <Route
               path="*"
               element={<Navigate to="/home/discover/recommand" />}
@@ -130,7 +128,7 @@ export default function App() {
   const [playlist, setPlaylist] = useState(["我喜欢的音乐"]);
 
   return (
-    <Layout className="flex-1">
+    <Layout className="flex-1 opacity-70">
       <Header className="header flex items-center justify-between select-none ">
         <div className="bg-blue-300 flex items-center">
           <div className="logo flex items-center">
@@ -230,7 +228,9 @@ export default function App() {
         <Route path="/music"></Route>
         <Route path="*" element={<Navigate to="/home/discover/recommand" />} />
       </Routes>
-      <Footer>
+
+      <Footer className="relative">
+        <div className="absolute w-full h-full top-0 left-0 tl-bg" />
         <Player />
       </Footer>
     </Layout>
