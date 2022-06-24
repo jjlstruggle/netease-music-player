@@ -20,8 +20,11 @@
     "noEmit": true,
     "jsx": "react-jsx",
     "suppressImplicitAnyIndexErrors": true,
-    "baseUrl": "./",
+    "baseUrl": ".",
     "paths": {
+      "@": [
+        "./src"
+      ],
       "@/api/*": [
         "./src/api/*"
       ],

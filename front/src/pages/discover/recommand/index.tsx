@@ -7,30 +7,15 @@ import {
 } from "../../../apis/discover";
 import { useEffect, useState } from "react";
 import { RightOutlined, CaretRightOutlined } from "@ant-design/icons";
-import { Row, Col } from "antd";
+import { Row, Col, Carousel } from "antd";
 import { Mv, Personalize, PlaylistInfo } from "../../../interface";
 import { Link } from "react-router-dom";
 import Image from "../../../common/Image";
 import { SanJiaoIcon } from "../../../assets/svg";
 import { handleCount } from "../../../utils";
-let $cImg = 0;
-let timer: any;
-const autoplay = (banner: any[], setCImg: Function) => {
-  if (banner.length) {
-    timer = setInterval(() => {
-      if ($cImg === banner.length - 1) {
-        $cImg = 0;
-      } else {
-        $cImg++;
-      }
-      setCImg($cImg);
-    }, 5000);
-  }
-};
 
 export default function Recommand() {
   const [banner, setBanner] = useState([]);
-  const [cImg, setCImg] = useState(0);
   const [recommand, setRecommand] = useState(new Array(10));
   const [personalized, setpersonalized] = useState(new Array(3));
   const [mv, setMv] = useState(new Array(4));
@@ -48,116 +33,30 @@ export default function Recommand() {
       setMv(res.result);
     });
   }, []);
-  useEffect(() => {
-    autoplay(banner, setCImg);
-    return () => {
-      clearTimeout(timer);
-    };
-  }, [banner]);
+
   return (
-    <div className="recommand">
-      <div
+    <div className="recommand flex flex-col flex-1 px-32 overflow-x-hidden overflow-y-auto">
+      <Carousel
+        className="pt-5 "
+        autoplay
         style={{
-          height: 360,
           position: "relative",
         }}
       >
         {banner.map((item: { imageUrl: string }, index) => {
-          if (index === cImg) {
-            return (
-              <img
-                src={item.imageUrl}
-                style={{
-                  height: 300,
-                  top: 0,
-                  zIndex: 1,
-                }}
-                className="banner"
-                alt="图片加载失败"
-                key={index}
-              />
-            );
-          }
-          if (
-            index === cImg - 1 ||
-            (cImg === 0 && index === banner.length - 1)
-          ) {
-            return (
-              <img
-                src={item.imageUrl}
-                style={{
-                  height: 240,
-                  top: 30,
-                  transform: "translateX(-50%)",
-                }}
-                className="banner"
-                alt="图片加载失败"
-                key={index}
-              />
-            );
-          }
-          if (
-            index === cImg + 1 ||
-            (cImg === banner.length - 1 && index === 0)
-          ) {
-            return (
-              <img
-                src={item.imageUrl}
-                style={{
-                  height: 240,
-                  top: 30,
-                  transform: "translateX(50%)",
-                }}
-                className="banner"
-                alt="图片加载失败"
-                key={index}
-              />
-            );
-          }
-
           return (
-            <img
-              src={item.imageUrl}
-              style={{
-                height: 240,
-                top: 30,
-                opacity: 0,
-              }}
-              className="banner"
-              alt="图片加载失败"
-              key={index}
-            />
+            <div className="overflow-hidden rounded-lg h-60">
+              <img
+                src={item.imageUrl}
+                className="h-full w-full"
+                alt="图片加载失败"
+                key={index}
+              />
+            </div>
           );
         })}
-        <div>
-          <ul
-            style={{
-              height: 60,
-              position: "absolute",
-              bottom: 0,
-              width: "100%",
-              margin: 0,
-            }}
-            className="flex-center-center"
-          >
-            {banner.map((i, index) => (
-              <li
-                className={"carousel-dots " + (index === $cImg ? "active" : "")}
-                key={index}
-                onMouseOver={() => {
-                  $cImg = index;
-                  setCImg(index);
-                  clearInterval(timer);
-                }}
-                onMouseLeave={() => {
-                  autoplay(banner, setCImg);
-                }}
-              />
-            ))}
-          </ul>
-        </div>
-      </div>
-      <div>
+      </Carousel>
+      <div className="mt-10">
         <div className="title">
           推荐歌单&nbsp;
           <RightOutlined />

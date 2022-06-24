@@ -1,56 +1,55 @@
 import { Tabs } from "antd";
 import "./index.scss";
-import CustomMade from "./customMade";
-import List from "./list";
-import Musician from "./musician";
-import Playlist from "./playlist";
-import Recommand from "./recommand";
-import NewMusic from "./newMusic";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
+import useLazy from "src/hooks/useLazy";
+import { Route, Routes, Navigate, useNavigate } from "react-router-dom";
 
 const { TabPane } = Tabs;
 
 const tabs = ["个性推荐", "专属订制", "歌单", "排行榜", "歌手", "最新音乐"];
-
-const getComponents = (tab: string) => {
-  switch (tab) {
-    case tabs[0]:
-      return <Recommand />;
-    case tabs[1]:
-      return <CustomMade />;
-    case tabs[2]:
-      return <Playlist />;
-    case tabs[3]:
-      return <List />;
-    case tabs[4]:
-      return <Musician />;
-    case tabs[5]:
-      return <NewMusic />;
-    default:
-      break;
-  }
-};
+const paths = [
+  "/recommand",
+  "/customMade",
+  "/playlist",
+  "/list",
+  "/musician",
+  "/newMusic",
+];
 
 export default function Discover() {
-  useEffect(() => {
-    requestAnimationFrame(() => {
-      let root = document.querySelector("#content");
-      let header = document.querySelector("#tab>.ant-tabs-nav");
-      let body: HTMLDivElement = document.querySelector(
-        "#tab>.ant-tabs-content-holder"
-      )!;
-      body!.style.height = root?.clientHeight! - header?.clientHeight! + "px";
-    });
-  }, []);
+  const NewMusic = useLazy(import("./newMusic"));
+  const Recommand = useLazy(import("./recommand"));
+  const Playlist = useLazy(import("./playlist"));
+  const Musician = useLazy(import("./musician"));
+  const List = useLazy(import("./list"));
+  const CustomMade = useLazy(import("./customMade"));
+  const navigate = useNavigate();
   return (
-    <div className="discover">
-      <Tabs defaultActiveKey="个性推荐" size="large" id="tab">
+    <div className="discover overflow-hidden relative flex flex-col">
+      <Tabs
+        defaultActiveKey="个性推荐"
+        size="large"
+        id="tab"
+        onChange={(key) => {
+          navigate("/home/discover" + paths[key]);
+        }}
+      >
         {tabs.map((tab, index) => (
-          <TabPane tab={tab} key={index}>
-            {getComponents(tab)}
-          </TabPane>
+          <TabPane tab={tab} key={index}></TabPane>
         ))}
       </Tabs>
+      <Routes>
+        <Route element={Recommand} path="/recommand"></Route>
+        <Route element={CustomMade} path="/customMade"></Route>
+        <Route element={Playlist} path="/playlist"></Route>
+        <Route element={List} path="/list"></Route>
+        <Route element={Musician} path="/musician"></Route>
+        <Route element={NewMusic} path="/newMusic"></Route>
+        <Route
+          path="*"
+          element={<Navigate to="/home/discover/recommand" />}
+        ></Route>
+      </Routes>
     </div>
   );
 }

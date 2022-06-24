@@ -3,7 +3,13 @@ module.exports = {
         "./src/**/*.{js,jsx,ts,tsx}",
     ],
     theme: {
-        extend: {},
+        extend: {
+            transitionProperty: {
+                'width': 'width',
+                'height': 'height',
+
+            }
+        },
     },
-    plugins: [],
+    plugins: [require('@tailwindcss/line-clamp'),],
 }

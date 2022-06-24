@@ -206,9 +206,11 @@ function Musiclist({
 }
 
 export default connect(
-  (state: ReduxState) => ({
-    songs: state.playlist.songs,
-  }),
+  (state: ReduxState) => {
+    return {
+      songs: state.player.songs,
+    };
+  },
   (dispatch) => ({
     // @ts-ignore
     updateSongs: (songs: MusicInfo[]) => dispatch($updateSongs(songs)),

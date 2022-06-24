@@ -18,8 +18,6 @@ import { LoopIcon, SuiJiIcon, HeartBeatIcon } from "../../assets/svg";
 import { ReduxState } from "../../interface";
 import { handleAr, parseDt } from "../../utils";
 function Player({ currentMusicInfo }: any) {
-  console.log(currentMusicInfo);
-
   const [ctime, setCTime] = useState("00:00");
   const [atime, setATime] = useState("00:00");
   const [isPause, setIsPause] = useState(true);
@@ -88,7 +86,7 @@ function Player({ currentMusicInfo }: any) {
     };
   }, [currentMusicInfo]);
   return (
-    <div className="player">
+    <div className="player flex select-none">
       <div
         style={{
           visibility:

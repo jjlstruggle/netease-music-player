@@ -23,15 +23,101 @@ import {
   CloseOutlined,
   ExpandAltOutlined,
 } from "@ant-design/icons";
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import { Route, Routes, Navigate } from "react-router-dom";
 import "./renderer";
 import Discover from "./pages/discover";
 import { PodcastIcon, MyCollectIcon, YinFuIcon } from "./assets/svg";
 import Player from "./components/player";
-import Playlist from "./pages/playlist";
-const { Item, ItemGroup } = Menu;
+import { ItemType } from "antd/lib/menu/hooks/useItems";
+import useLazy from "./hooks/useLazy";
+
 const { Header, Content, Sider, Footer } = Layout;
+
+const Home = ({ playlist }: { playlist: string[] }) => {
+  const LazyPlayList = useLazy(import("./pages/playlist/index"));
+
+  const items: ItemType[] = useMemo(
+    () => [
+      { label: "发现音乐", key: "1" },
+      { label: "播客", key: "2" },
+      { label: "视频", key: "3" },
+      { label: "关注", key: "4" },
+      { label: "直播", key: "5" },
+      { label: "私人FM", key: "6" },
+      {
+        label: "我的音乐",
+        key: "l2",
+        children: [
+          {
+            label: "本地与下载",
+            key: "7",
+            icon: <LoginOutlined rotate={90} />,
+          },
+          { label: "最近播放", key: "8", icon: <HistoryOutlined /> },
+          { label: "我的音乐云盘", key: "9", icon: <CloudOutlined /> },
+          { label: "我的播客", key: "10", icon: <PodcastIcon /> },
+          { label: "我的收藏", key: "11", icon: <MyCollectIcon /> },
+        ],
+      },
+      {
+        label: (
+          <div className="flex-side-center">
+            <div>创建的歌单</div>
+            <div className="create">
+              <PlusOutlined />
+            </div>
+          </div>
+        ),
+        key: "l3",
+        children: playlist.map((item: string, index): any => {
+          const $item = {
+            label: item,
+            key: index,
+            icon: index === 0 ? <HeartOutlined /> : <YinFuIcon />,
+          };
+          return $item;
+        }),
+      },
+    ],
+    [playlist]
+  );
+  return (
+    <Layout style={{ flex: 1 }} className="home">
+      <Sider width={200} className="border-b border-b-slate-300">
+        <Menu
+          defaultSelectedKeys={["1"]}
+          defaultOpenKeys={["sub1"]}
+          mode="inline"
+          style={{
+            height: "100%",
+          }}
+          items={items}
+        />
+      </Sider>
+      <Layout>
+        <Content
+          id="content"
+          className="flex flex-1 overflow-hidden shadow-lg px-6 border-b border-b-slate-300"
+        >
+          <Routes>
+            <Route path="/discover/*" element={<Discover />}></Route>
+            <Route path="/podcast"></Route>
+            <Route path="/video"></Route>
+            <Route path="/focus"></Route>
+            <Route path="/live"></Route>
+            <Route path="/privateFm"></Route>
+            <Route path="/playlist" element={LazyPlayList}></Route>
+            <Route
+              path="*"
+              element={<Navigate to="/home/discover/recommand" />}
+            />
+          </Routes>
+        </Content>
+      </Layout>
+    </Layout>
+  );
+};
 
 export default function App() {
   const [userInfo, setUserInfo] = useState({
@@ -41,142 +127,35 @@ export default function App() {
   });
 
   const [isModalVisible, setIsModalVisible] = useState(false);
-  const [isFold, setIsFold] = useState(false);
   const [playlist, setPlaylist] = useState(["我喜欢的音乐"]);
 
-  const Home = (
-    <Layout style={{ flex: 1 }} className="home">
-      <Sider width={200}>
-        <Menu
-          defaultSelectedKeys={["1"]}
-          defaultOpenKeys={["sub1"]}
-          mode="inline"
-          style={{
-            height: "100%",
-          }}
-        >
-          <ItemGroup key="g1" title="">
-            <Item key="1">发现音乐</Item>
-            <Item key="2">播客</Item>
-            <Item key="3">视频</Item>
-            <Item key="4">关注</Item>
-            <Item key="5">直播</Item>
-            <Item key="6">私人FM</Item>
-          </ItemGroup>
-          <ItemGroup key="g2" title="我的音乐">
-            <Item key="7" icon={<LoginOutlined rotate={90} />}>
-              本地与下载
-            </Item>
-            <Item key="8" icon={<HistoryOutlined />}>
-              最近播放
-            </Item>
-            <Item key="9" icon={<CloudOutlined />}>
-              我的音乐云盘
-            </Item>
-            <Item key="10" icon={<PodcastIcon />}>
-              我的播客
-            </Item>
-            <Item key="11" icon={<MyCollectIcon />}>
-              我的收藏
-            </Item>
-          </ItemGroup>
-          <ItemGroup
-            key="g3"
-            title={
-              <div className="flex-side-center">
-                <div>
-                  创建的歌单
-                  <CaretUpOutlined
-                    style={{
-                      marginLeft: 8,
-                    }}
-                    rotate={isFold ? 0 : 180}
-                    onClick={() => setIsFold(!isFold)}
-                  />
-                </div>
-
-                <div className="create">
-                  <PlusOutlined />
-                </div>
-              </div>
-            }
-          >
-            {!isFold
-              ? playlist.map((playlsitName, index) => (
-                  <Item
-                    icon={index === 0 ? <HeartOutlined /> : <YinFuIcon />}
-                    key={12 + index}
-                  >
-                    {playlsitName}
-                  </Item>
-                ))
-              : ""}
-          </ItemGroup>
-        </Menu>
-      </Sider>
-      <Layout
-        style={{
-          padding: "0 24px 0 24px",
-        }}
-      >
-        <Content id="content" style={{ flex: 1 }}>
-          <Routes>
-            <Route path="/discover" element={<Discover />}></Route>
-            <Route path="/podcast"></Route>
-            <Route path="/video"></Route>
-            <Route path="/focus"></Route>
-            <Route path="/live"></Route>
-            <Route path="/privateFm"></Route>
-            <Route path="/playlist" element={<Playlist />}></Route>
-            <Route path="*" element={<Navigate to="/home/discover" />} />
-          </Routes>
-        </Content>
-      </Layout>
-    </Layout>
-  );
-
   return (
-    <Layout
-      style={{
-        height: "100vh",
-      }}
-    >
-      <Header
-        className="header"
-        style={{
-          backgroundColor: "#69c0ff",
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "space-between",
-        }}
-      >
-        <div
-          style={{
-            backgroundColor: "#69c0ff",
-            display: "flex",
-            alignItems: "center",
-          }}
-        >
-          <div className="logo">
-            <img src={logo} alt="图片加载失败" />
-            <div>网易云音乐</div>
+    <Layout className="flex-1">
+      <Header className="header flex items-center justify-between select-none ">
+        <div className="bg-blue-300 flex items-center">
+          <div className="logo flex items-center">
+            <img
+              className="rounded-full w-10 h-10 mr-4"
+              src={logo}
+              alt="图片加载失败"
+            />
+            <div className="text-xl text-white font-serif">网易云音乐</div>
           </div>
-          <div className="go">
-            <LeftOutlined />
-            <RightOutlined />
+          <div className="text-xl flex items-center ml-5">
+            <span className="text-neutral-50 p-1 bg-slate-200 rounded-full  flex justify-center items-center mr-2 cursor-pointer">
+              <LeftOutlined />
+            </span>
+            <span className="mr-10 text-neutral-50 p-1 bg-slate-200 rounded-full  flex justify-center items-center cursor-pointer">
+              <RightOutlined />
+            </span>
           </div>
-          <Input
-            suffix={<SearchOutlined />}
-            className="search"
-            placeholder="搜索音乐，视频，歌词，电台"
-          />
-          <div className="go">
-            <AudioOutlined />
+          <div className="w-80 flex items-center rounded-full overflow-hidden">
+            <Input.Search placeholder="搜索音乐，视频，歌词，电台" />
           </div>
         </div>
-        <div className="settings">
+        <div className="settings flex text-white items-center text-xl">
           <div
-            className="avatar pointer"
+            className="flex items-center cursor-pointer mx-4"
             onClick={() => setIsModalVisible(true)}
           >
             {userInfo.avatar ? (
@@ -185,47 +164,51 @@ export default function App() {
               <UserOutlined />
             )}
           </div>
-          <div className="name pointer">
+          <div className="name cursor-pointer text-sm flex mx-4">
             <span>{userInfo.name || "未登录"}</span>
             <CaretDownOutlined />
-            <span>{userInfo.vipStatus === 0 ? "开通vip" : "vip"}</span>
+            <span className="lg-none">
+              {userInfo.vipStatus === 0 ? "开通vip" : "vip"}
+            </span>
           </div>
-          <div>
+          <div className="flex mx-4 lg-none">
             <SkinOutlined />
           </div>
-          <div>
+          <div className="flex mx-4 lg-none">
             <MailOutlined />
           </div>
-          <div>
+          <div className="flex mx-4 lg-none">
             <SettingOutlined />
           </div>
           <Divider
+            className="mx-4"
             type="vertical"
             style={{
               borderLeftWidth: 2,
               height: "1.5rem",
             }}
           />
-          <div>
+          <div className="flex mx-4 overflow-hidden lg-none">
             <BoldOutlined />
           </div>
-          <div>
+          <div className="flex mx-4 overflow-hidden lg-none">
             <GithubOutlined />
           </div>
           <Divider
+            className="overflow-hidden mx-4 lg-none lg:mx-0 lg-none"
             type="vertical"
             style={{
               borderLeftWidth: 2,
               height: "1.5rem",
             }}
           />
-          <div>
+          <div className="flex mx-4">
             <MinusOutlined id="min" />
           </div>
-          <div>
+          <div className="flex mx-4">
             <ExpandAltOutlined id="max" />
           </div>
-          <div>
+          <div className="flex mx-4">
             <CloseOutlined id="exit" />
           </div>
         </div>
@@ -243,9 +226,9 @@ export default function App() {
         </Modal>
       </Header>
       <Routes>
-        <Route path="/home/*" element={Home}></Route>
+        <Route path="/home/*" element={<Home playlist={playlist} />}></Route>
         <Route path="/music"></Route>
-        <Route path="*" element={<Navigate to="/home/" />} />
+        <Route path="*" element={<Navigate to="/home/discover/recommand" />} />
       </Routes>
       <Footer>
         <Player />

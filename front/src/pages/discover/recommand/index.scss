@@ -1,80 +1,33 @@
 .recommand {
-  overflow: hidden auto;
-  padding: 0 108px;
-  .banner {
-    width: 50%;
-    position: absolute;
-    z-index: 0;
-    margin: 0 auto;
-    left: 0;
-    right: 0;
-    transition: all 0.3s;
-    border-radius: 15px;
-  }
-  .carousel-dots {
-    width: 8px;
-    height: 8px;
-    background-color: grey;
-    border-radius: 4px;
-    margin: 0 12px;
-  }
-  .carousel-dots.active {
-    background-color: rgb(105, 192, 255);
-  }
   .title {
-    font-size: 24px;
-    font-weight: bold;
-    margin-bottom: 10px;
+    @apply flex text-xl font-bold mb-2;
+    span{
+      @apply flex items-center;
+    }
   }
   .playlist-name {
-    font-size: 18px;
-    margin-top: 5px;
-    text-overflow: -o-ellipsis-lastline;
-    overflow: hidden;
-    text-overflow: ellipsis;
+    @apply text-base mt-1 text-ellipsis overflow-hidden line-clamp-2 text-gray-700 hover:text-black;
     display: -webkit-box;
-    -webkit-line-clamp: 2;
-    line-clamp: 2;
     -webkit-box-orient: vertical;
-    color: rgb(54, 47, 47);
   }
-  .playlist-name:hover {
-    color: #000;
-  }
-
   .recommand-personalized {
-    position: relative;
+    @apply relative;
     img {
-      width: 100%;
-      border-radius: 10px;
+      @apply w-full rounded-lg;
     }
     .icon {
-      position: absolute;
-      top: 0;
-      left: 0;
-      transform: translate(30px, 10px);
-      width: 30px;
-      height: 30px;
-      border-radius: 15px;
+      @apply absolute top-0 left-0 translate-x-7 translate-y-2 w-7 h-7 rounded-2xl text-2xl text-blue-400;
       background-color: rgba(222, 230, 229, 0.678);
-      color: rgb(105, 192, 255);
-      font-size: 25px;
     }
   }
   .recommand-mv {
-    position: relative;
+    @apply relative;
     img {
-      width: 100%;
-      border-radius: 10px;
+      @apply w-full rounded-lg;
     }
     .play-count {
-      position: absolute;
-      top: 5px;
+      @apply absolute top-1 text-white text-sm flex items-center;
       right: 10%;
-      color: #fff;
-      font-size: 15px;
-      display: flex;
-      align-items: center;
     }
   }
 }

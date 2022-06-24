@@ -2,16 +2,6 @@
 @import "tailwindcss/components";
 @import "tailwindcss/utilities";
 
-* {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-}
-
-li {
-  list-style: none;
-}
-
 #root {
   width: 100vw;
   height: 100vh;
