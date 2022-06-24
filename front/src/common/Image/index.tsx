@@ -1,4 +1,4 @@
-import "./index.scss";
+import "./index.less";
 import imglazeload from "../../assets/img/img-lazyload.gif";
 import { useState } from "react";
 import { CaretRightOutlined } from "@ant-design/icons";

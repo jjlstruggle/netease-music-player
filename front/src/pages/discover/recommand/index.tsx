@@ -33,7 +33,6 @@ export default function Recommand() {
       setMv(res.result);
     });
   }, []);
-
   return (
     <div className="recommand flex flex-col flex-1 px-32 overflow-x-hidden overflow-y-auto">
       <Carousel
@@ -62,7 +61,7 @@ export default function Recommand() {
         </div>
         <Row gutter={[32, 32]} style={{ marginBottom: 32 }}>
           {recommand.map((playlist: PlaylistInfo, index) => (
-            <Col key={index} className="recommand-playlist" span={"4_8"}>
+            <Col key={index} className="cursor-pointer" span={"4_8"}>
               <Link to={`/home/playlist?pid=${playlist.id}`}>
                 <Image
                   url={playlist.picUrl || ""}

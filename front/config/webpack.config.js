@@ -29,7 +29,7 @@ const createEnvironmentHash = require('./webpack/persistentCache/createEnvironme
 const WebpackBar = require('webpackbar');
 // Source maps are resource heavy and can cause out of memory issue for large source files.
 const shouldUseSourceMap = process.env.GENERATE_SOURCEMAP !== 'false';
-
+const { getThemeVariables } = require('antd/dist/theme')
 const reactRefreshRuntimeEntry = require.resolve('react-refresh/runtime');
 const reactRefreshWebpackPluginRuntimeEntry = require.resolve(
   '@pmmmwh/react-refresh-webpack-plugin'
@@ -180,7 +180,6 @@ module.exports = function (webpackEnv) {
               javascriptEnabled: true,
               modifyVars: getThemeVariables({
                 dark: true,
-                compact: true,
               }),
             }
           },

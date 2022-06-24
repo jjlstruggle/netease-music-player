@@ -5,20 +5,17 @@ import {
   UserOutlined,
   LeftOutlined,
   RightOutlined,
-  SearchOutlined,
   GithubOutlined,
   SettingOutlined,
   SkinOutlined,
   BoldOutlined,
   MailOutlined,
   CaretDownOutlined,
-  AudioOutlined,
   PlusOutlined,
   LoginOutlined,
   HistoryOutlined,
   CloudOutlined,
   HeartOutlined,
-  CaretUpOutlined,
   MinusOutlined,
   CloseOutlined,
   ExpandAltOutlined,
@@ -31,12 +28,11 @@ import { PodcastIcon, MyCollectIcon, YinFuIcon } from "./assets/svg";
 import Player from "./components/player";
 import { ItemType } from "antd/lib/menu/hooks/useItems";
 import useLazy from "./hooks/useLazy";
+const LazyPlayList = useLazy(import("./pages/playlist/index"));
 
 const { Header, Content, Sider, Footer } = Layout;
 
 const Home = ({ playlist }: { playlist: string[] }) => {
-  const LazyPlayList = useLazy(import("./pages/playlist/index"));
-
   const items: ItemType[] = useMemo(
     () => [
       { label: "发现音乐", key: "1" },
@@ -86,7 +82,8 @@ const Home = ({ playlist }: { playlist: string[] }) => {
     <Layout className="home flex-1">
       <Sider width={200} className="border-b border-b-slate-300">
         <Menu
-          className="h-full overflow-x-hidden overflow-y-auto"
+          style={{ fontSize: 16 }}
+          className="h-full overflow-x-hidden overflow-y-auto "
           defaultSelectedKeys={["1"]}
           defaultOpenKeys={["sub1"]}
           mode="inline"
@@ -128,9 +125,9 @@ export default function App() {
   const [playlist, setPlaylist] = useState(["我喜欢的音乐"]);
 
   return (
-    <Layout className="flex-1 opacity-70">
+    <Layout className="flex-1 opacity-80">
       <Header className="header flex items-center justify-between select-none ">
-        <div className="bg-blue-300 flex items-center">
+        <div className="flex items-center">
           <div className="logo flex items-center">
             <img
               className="rounded-full w-10 h-10 mr-4"
@@ -147,7 +144,7 @@ export default function App() {
               <RightOutlined />
             </span>
           </div>
-          <div className="w-80 flex items-center rounded-full overflow-hidden">
+          <div className="w-80 flex items-center overflow-hidden">
             <Input.Search placeholder="搜索音乐，视频，歌词，电台" />
           </div>
         </div>

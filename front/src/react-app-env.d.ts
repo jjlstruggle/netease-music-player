@@ -70,8 +70,6 @@ declare module "*.module.sass" {
   export default classes;
 }
 
-declare global {
-  interface Window {
-    $audio: AudioNode;
-  }
+declare interface Window {
+  $audio: HTMLAudioElement;
 }

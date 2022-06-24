@@ -39,24 +39,22 @@ function Player({ currentMusicInfo }: any) {
       setIsPause(true);
     }
     function whenTimeUpdate() {
-      //@ts-ignore
       setCTime(parseDt(window.$audio.currentTime));
-      //@ts-ignore
+
       let rate = window.$audio.currentTime / window.$audio.duration;
       playProcess.current!.style.width =
         playAllProcess.current!.clientWidth * rate + "px";
     }
-    //@ts-ignore
+
     window.$audio.addEventListener("play", whenPlay);
-    //@ts-ignore
+
     window.$audio.addEventListener("pause", whenPause);
-    //@ts-ignore
+
     window.$audio.addEventListener("timeupdate", whenTimeUpdate);
     playAllProcess.current!.addEventListener("mousedown", (event) => {
       let rate =
         (event.clientX - playAllProcess.current!.getBoundingClientRect().left) /
         playAllProcess.current!.clientWidth;
-      //@ts-ignore
 
       window.$audio.currentTime = window.$audio.duration * rate;
       document.onmousemove = (event) => {
@@ -64,7 +62,7 @@ function Player({ currentMusicInfo }: any) {
           (event.clientX -
             playAllProcess.current!.getBoundingClientRect().left) /
           playAllProcess.current!.clientWidth;
-        //@ts-ignore
+
         window.$audio.currentTime = window.$audio.duration * rate;
       };
     });
@@ -77,11 +75,10 @@ function Player({ currentMusicInfo }: any) {
       }
     };
     return () => {
-      //@ts-ignore
       window.$audio.removeEventListener("pause", whenPause);
-      //@ts-ignore
+
       window.$audio.removeEventListener("play", whenPlay);
-      //@ts-ignore
+
       window.$audio.removeEventListener("timeupdate", whenTimeUpdate);
     };
   }, [currentMusicInfo]);
@@ -119,14 +116,10 @@ function Player({ currentMusicInfo }: any) {
           <div
             className="play-control"
             onClick={() => {
-              //@ts-ignore
               if (window.$audio.src) {
-                //@ts-ignore
                 if (window.$audio.paused) {
-                  //@ts-ignore
                   window.$audio.play();
                 } else {
-                  //@ts-ignore
                   window.$audio.pause();
                 }
                 setIsPause(!isPause);
@@ -141,13 +134,6 @@ function Player({ currentMusicInfo }: any) {
           <div className="music-lyric">
             <span>词</span>
           </div>
-        </div>
-        <div className="player-process">
-          <div className="ctime">{ctime}</div>
-          <div className="process" ref={playAllProcess}>
-            <span ref={playProcess} />
-          </div>
-          <div className="atime">{atime}</div>
         </div>
       </div>
       <div
