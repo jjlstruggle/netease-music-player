@@ -1,60 +1,40 @@
 .ant-layout-footer {
-  @apply px-8 py-4;
+  @apply px-0 py-0;
 }
 
 .player {
+  @apply px-8 py-4 box-content;
   height: 7vh;
-  .power-info {
-    @apply border-t border-b border-t-white border-b-white flex items-center justify-center px-4 flex-1 mr-20;
-  }
-  div {
-    .player-process {
-      @apply flex items-center absolute -translate-x-1/2 left-1/2;
-    }
-
-    .process {
-      @apply h-1 bg-zinc-200 mx-2 rounded-sm relative;
-      width: 600px;
-    }
-
-    .ctime,
-    .atime {
-      @apply text-sm text-slate-300;
-    }
-
-    .process > span {
-      @apply bg-blue-300 absolute transition-width duration-200 h-full;
-    }
-
-    #controller {
-      @apply flex items-center justify-center;
-      div {
-        @apply mx-5;
-      }
-      .play-mode,
-      .music-lyric {
-        @apply text-xl;
-      }
-      .last-music,
-      .next-music {
-        @apply text-2xl;
-      }
-      .play-control {
-        @apply text-3xl;
-      }
-    }
-  }
-}
-
-.player > div:nth-child(1) {
-  @apply flex w-1/4 h-full items-center;
-  img {
+  .music-pic {
     width: 7vh;
     height: 7vh;
-    @apply mr-4;
+    @apply mr-4 rounded overflow-hidden;
+    img {
+      @apply w-full h-full;
+    }
   }
-}
-
-#toneQuality {
-  @apply rounded-sm border border-blue-400 px-2 font-semibold text-base mx-3;
+  .power-info {
+    @apply border-t border-b border-t-white border-b-white flex items-center justify-center px-4 flex-1 mr-20 my-1;
+  }
+  .volume-progress {
+    @apply relative h-1 w-20 bg-slate-400 rounded-md;
+  }
+  .volume-progress-cur {
+    @apply h-full bg-white rounded-md absolute left-0 transition-width duration-75;
+  }
+  .audioProgressBar {
+    @apply h-1 bg-slate-400 absolute top-0 left-0 w-full;
+    .audioProgressTrack {
+      @apply h-full rounded-md absolute left-0 transition-width duration-75 bg-gradient-to-r from-yellow-100 to-red-300;
+      width: 400px;
+    }
+    .hanlder {
+      box-shadow: 0;
+      transition: border-color 0.3s, box-shadow 0.6s,
+        transform 0.3s cubic-bezier(0.18, 0.89, 0.32, 1.28);
+    }
+    .hanlder:hover {
+      border-color: #177ddc !important;
+    }
+  }
 }

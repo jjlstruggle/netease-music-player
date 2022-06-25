@@ -709,10 +709,6 @@ module.exports = function (webpackEnv) {
           infrastructure: 'silent',
         },
       }),
-
-      new BundleAnalyzerPlugin({
-        analyzerMode: 'server',
-      }),
       new WebpackBar()
     ].filter(Boolean),
     // Turn off performance processing because we utilize

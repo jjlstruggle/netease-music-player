@@ -28,6 +28,7 @@ import { PodcastIcon, MyCollectIcon, YinFuIcon } from "./assets/svg";
 import Player from "./components/player";
 import { ItemType } from "antd/lib/menu/hooks/useItems";
 import useLazy from "./hooks/useLazy";
+
 const LazyPlayList = useLazy(import("./pages/playlist/index"));
 
 const { Header, Content, Sider, Footer } = Layout;
@@ -80,7 +81,7 @@ const Home = ({ playlist }: { playlist: string[] }) => {
   );
   return (
     <Layout className="home flex-1">
-      <Sider width={200} className="border-b border-b-slate-300">
+      <Sider width={200}>
         <Menu
           style={{ fontSize: 16 }}
           className="h-full overflow-x-hidden overflow-y-auto "
@@ -93,7 +94,7 @@ const Home = ({ playlist }: { playlist: string[] }) => {
       <Layout>
         <Content
           id="content"
-          className="flex flex-1 overflow-hidden shadow-lg px-6 border-b border-b-slate-300"
+          className="flex flex-1 overflow-hidden shadow-lg px-6"
         >
           <Routes>
             <Route path="/discover/*" element={<Discover />}></Route>

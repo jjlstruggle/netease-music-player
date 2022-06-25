@@ -66,6 +66,8 @@ const YinFu = () => (
 
 const SanJiao = () => (
   <svg
+    width="1em"
+    height="1em"
     fill="currentColor"
     t="1640505938289"
     viewBox="0 0 1024 1024"
