@@ -2,13 +2,11 @@ import { getMusicListInfo } from "../../../apis/playlist";
 import {
   PlaylistState,
   PlaylistActions,
-  ReduxState,
   MusicInfo,
   PlayerActions,
 } from "../../../interface";
 import { Table, Input, Space, Button, InputRef } from "antd";
 import { useEffect, useRef, useState, Ref } from "react";
-import { connect } from "react-redux";
 import "./index.less";
 import { fomate, handleAr, parseDt } from "../../../utils";
 
@@ -19,10 +17,11 @@ import {
 } from "@ant-design/icons";
 import { getMusicUrl } from "../../../apis/music";
 import {
-  updateSongs as $updateSongs,
-  updateCurrentMusicInfo as $updateCurrentMusicInfo,
-} from "../../../models/reducers/player";
+  updateCurrentSongs,
+  updateSongsList,
+} from "../../../models/slice/musicInfo";
 import useLazy from "src/hooks/useLazy";
+import { useDispatch } from "react-redux";
 
 const LazyHightLight = useLazy(import("react-highlight-words"));
 
@@ -32,15 +31,16 @@ interface musicIdsObject {
 
 function Musiclist({
   musicIds,
-  songs,
-  updateSongs,
-  updateCurrentMusicInfo,
 }: { musicIds: musicIdsObject[] } & PlaylistState &
   PlaylistActions &
   PlayerActions) {
+  const dispatch = useDispatch();
+
   const [search, setSearch] = useState({
     searchText: "",
   });
+
+  const [songs, updateSongs] = useState([]);
 
   const handleSearch = (selectedKeys: string[], confirm: Function) => {
     confirm();
@@ -153,7 +153,7 @@ function Musiclist({
       ids += idObj.id + ",";
     });
     getMusicListInfo(ids.slice(0, ids.length - 1)).then((res) => {
-      updateSongs!(res.songs);
+      updateSongs(res.songs);
     });
     let content = document.querySelector("#content")?.clientHeight!;
     let head =
@@ -189,7 +189,7 @@ function Musiclist({
             let info = Object.assign({}, record.info, {
               musicUrlInfo: musicUrlInfo.data[0],
             });
-            updateCurrentMusicInfo!(info);
+            dispatch(updateCurrentSongs(info));
             // @ts-ignore
             window.$audio.src = info.musicUrlInfo.url;
             // @ts-ignore
@@ -200,7 +200,6 @@ function Musiclist({
       className="table"
       // @ts-ignore
       columns={columns}
-      // @ts-ignore
       dataSource={data}
       pagination={false}
       scroll={{ y: tableHeight }}
@@ -208,22 +207,4 @@ function Musiclist({
   );
 }
 
-export default connect(
-  (state: ReduxState) => {
-    return {
-      songs: state.player.songs,
-    };
-  },
-  (dispatch) => ({
-    // @ts-ignore
-    updateSongs: (songs: MusicInfo[]) => dispatch($updateSongs(songs)),
-    updateCurrentMusicInfo: (
-      currentMusicInfo: MusicInfo & {
-        musicUrlInfo: {
-          url: string;
-        };
-      }
-      // @ts-ignore
-    ) => dispatch($updateCurrentMusicInfo(currentMusicInfo)),
-  })
-)(Musiclist);
+export default Musiclist;

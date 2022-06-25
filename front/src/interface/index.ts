@@ -87,10 +87,8 @@ export interface Comment {
 export type playMode = "order" | "loop" | "listLoop" | "heartBeat" | "suiJi";
 
 export interface PlayerState {
-  musicList: [];
-  currentMusicInfo: {};
-  playMode: playMode;
-  songs: [];
+  playList: [];
+  currentPlayListInfo: {};
 }
 
 export interface PlayerActions {

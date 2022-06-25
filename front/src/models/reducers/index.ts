@@ -1,3 +1,4 @@
 import { combineReducers } from "@reduxjs/toolkit";
-import player from "./player";
-export default combineReducers({ player });
+import playlist from "../slice/playlist";
+import musicInfo from "../slice/musicInfo";
+export default combineReducers({ musicInfo, playlist });

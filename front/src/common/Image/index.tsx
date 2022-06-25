@@ -1,9 +1,9 @@
 import "./index.less";
 import imglazeload from "../../assets/img/img-lazyload.gif";
-import { useState } from "react";
 import { CaretRightOutlined } from "@ant-design/icons";
 import { SanJiaoIcon } from "../../assets/svg";
 import { handleCount } from "../../utils";
+import LazyImage from "../LazyImage";
 export default function Image({
   url,
   playCount,
@@ -11,7 +11,6 @@ export default function Image({
   url: string;
   playCount?: number;
 }) {
-  const [load, setLoad] = useState(true);
   return (
     <div
       style={{
@@ -19,24 +18,7 @@ export default function Image({
       }}
       className="custom-img"
     >
-      {load ? (
-        <div
-          className="lazyload-img"
-          style={{
-            backgroundImage: `url(${imglazeload})`,
-          }}
-        ></div>
-      ) : (
-        ""
-      )}
-      <img
-        src={url}
-        style={{
-          opacity: load ? 0 : 1,
-        }}
-        alt="图片加载失败"
-        onLoad={() => setLoad(false)}
-      />
+      <LazyImage previewSrc={imglazeload} src={url} alt="图片加载失败" />
       <div className="play-count">
         <SanJiaoIcon style={{ minWidth: 15, minHeight: 15 }} />
         {handleCount(playCount!)}

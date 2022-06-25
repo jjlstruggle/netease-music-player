@@ -8,7 +8,6 @@ import App from "./App";
 import store from "./models";
 import "./apis";
 window["$audio"] = new Audio(test);
-console.log(window.$audio);
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(

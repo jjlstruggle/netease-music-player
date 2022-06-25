@@ -20,36 +20,7 @@
     "noEmit": true,
     "jsx": "react-jsx",
     "suppressImplicitAnyIndexErrors": true,
-    "baseUrl": ".",
-    "paths": {
-      "@": [
-        "./src"
-      ],
-      "@/api/*": [
-        "./src/api/*"
-      ],
-      "@assets/*": [
-        "./src/assets/*"
-      ],
-      "@common/*": [
-        "./src/common/*"
-      ],
-      "@components/*": [
-        "./src/components/*"
-      ],
-      "interface/*": [
-        "./src/interface/*"
-      ],
-      "@models/*": [
-        "./src/models/*"
-      ],
-      "@pages/*": [
-        "./src/pages/*"
-      ],
-      "@utils/*": [
-        "./src/utils/*"
-      ]
-    }
+    "baseUrl": "."
   },
   "include": [
     "src/*"

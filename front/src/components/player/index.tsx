@@ -18,7 +18,6 @@ import {
   Dispatch,
   Fragment,
   LegacyRef,
-  MutableRefObject,
   SetStateAction,
   useEffect,
   useRef,
@@ -30,9 +29,7 @@ import {
   HeartBeatIcon,
   SanJiaoIcon,
 } from "../../assets/svg";
-import { ReduxState } from "../../interface";
 import { handleAr, parseDt } from "../../utils";
-import useMounted from ".././../hooks/useMounted";
 import throttle from "../../utils/throttle";
 import { Slider, Tooltip } from "antd";
 
@@ -143,7 +140,6 @@ function Player({ currentMusicInfo }: any) {
   const [ctime, setCTime] = useState("00:00");
   const [atime, setATime] = useState("00:00");
   const [isPause, setIsPause] = useState(true);
-  console.log(isPause);
 
   return (
     <div className="player flex select-none relative">
@@ -207,6 +203,4 @@ function Player({ currentMusicInfo }: any) {
   );
 }
 
-export default connect((state: ReduxState) => ({
-  currentMusicInfo: state.player.currentMusicInfo,
-}))(Player);
+export default Player;
