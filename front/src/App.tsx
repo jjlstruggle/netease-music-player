@@ -18,22 +18,59 @@ import {
   HeartOutlined,
   MinusOutlined,
   CloseOutlined,
-  ExpandAltOutlined,
+  ExpandOutlined,
+  CompressOutlined,
 } from "@ant-design/icons";
-import { useMemo, useState } from "react";
-import { Route, Routes, Navigate } from "react-router-dom";
+import { useContext, useMemo, useState } from "react";
+import { Route, Routes, Navigate, useNavigate } from "react-router-dom";
 import "./renderer";
 import Discover from "./pages/discover";
 import { PodcastIcon, MyCollectIcon, YinFuIcon } from "./assets/svg";
 import Player from "./components/player";
 import { ItemType } from "antd/lib/menu/hooks/useItems";
 import useLazy from "./hooks/useLazy";
-
+import { Ctx } from "./context/back";
 const LazyPlayList = useLazy(import("./pages/playlist/index"));
 const LazyMusic = useLazy(import("./pages/music"));
 const { Header, Content, Sider, Footer } = Layout;
 
+export const Icons = () => {
+  const { ipcRenderer } = window;
+  const [isMax, setIsMax] = useState(false);
+  return (
+    <>
+      <div
+        className="flex mx-3 bg-red-600 rounded-full p-1 cursor-pointer tl-click hover:text-blue-300"
+        onClick={() => {
+          ipcRenderer.send("min");
+        }}
+      >
+        <MinusOutlined />
+      </div>
+      <div
+        className="flex mx-3 bg-yellow-400 rounded-full p-1 cursor-pointer tl-click hover:text-blue-300"
+        onClick={async () => {
+          const res = await ipcRenderer.invoke("windowIsMaximized");
+          setIsMax(res);
+          ipcRenderer.send("max");
+        }}
+      >
+        {isMax ? <CompressOutlined /> : <ExpandOutlined />}
+      </div>
+      <div
+        className="flex mx-3 bg-green-200 rounded-full p-1 cursor-pointer tl-click hover:text-blue-300"
+        onClick={() => {
+          ipcRenderer.send("close");
+        }}
+      >
+        <CloseOutlined />
+      </div>
+    </>
+  );
+};
+
 const Home = () => {
+  const navigate = useNavigate();
   const [playlist, setPlaylist] = useState(["我喜欢的音乐"]);
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [userInfo, setUserInfo] = useState({
@@ -41,7 +78,6 @@ const Home = () => {
     name: "",
     vipStatus: 0,
   });
-
   const items: ItemType[] = useMemo(
     () => [
       { label: "发现音乐", key: "1" },
@@ -87,9 +123,13 @@ const Home = () => {
     ],
     [playlist]
   );
+  const { shell } = window;
   return (
-    <>
+    <div className="flex flex-1 flex-col overflow-auto opacity-80">
       <Header className="header flex items-center justify-between select-none ">
+        <div className="flex items-center">
+          <Icons />
+        </div>
         <div className="flex items-center">
           <div className="logo flex items-center">
             <img
@@ -97,23 +137,32 @@ const Home = () => {
               src={logo}
               alt="图片加载失败"
             />
-            <div className="text-xl text-white font-serif">网易云音乐</div>
           </div>
-          <div className="text-xl flex items-center ml-5">
-            <span className="text-neutral-50 p-1 bg-slate-200 rounded-full  flex justify-center items-center mr-2 cursor-pointer">
+          <div className="text-xl flex items-center ml-5 tl-click">
+            <span
+              className="text-neutral-50 p-1 bg-slate-200 rounded-full flex justify-center items-center mr-2 cursor-pointer"
+              onClick={() => {
+                navigate(-1);
+              }}
+            >
               <LeftOutlined />
             </span>
-            <span className="mr-10 text-neutral-50 p-1 bg-slate-200 rounded-full  flex justify-center items-center cursor-pointer">
+            <span
+              className="mr-10 text-neutral-50 p-1 bg-slate-200 rounded-full  flex justify-center items-center cursor-pointer"
+              onClick={() => {
+                navigate(1);
+              }}
+            >
               <RightOutlined />
             </span>
           </div>
-          <div className="w-80 flex items-center overflow-hidden">
+          <div className="w-80 flex items-center overflow-hidden tl-click">
             <Input.Search placeholder="搜索音乐，视频，歌词，电台" />
           </div>
         </div>
         <div className="settings flex text-white items-center text-xl">
           <div
-            className="flex items-center cursor-pointer mx-4"
+            className="flex items-center cursor-pointer mx-4 tl-click"
             onClick={() => setIsModalVisible(true)}
           >
             {userInfo.avatar ? (
@@ -122,20 +171,20 @@ const Home = () => {
               <UserOutlined />
             )}
           </div>
-          <div className="name cursor-pointer text-sm flex mx-4">
+          <div className="name cursor-pointer text-sm flex mx-4 tl-click">
             <span>{userInfo.name || "未登录"}</span>
             <CaretDownOutlined />
             <span className="lg-none">
               {userInfo.vipStatus === 0 ? "开通vip" : "vip"}
             </span>
           </div>
-          <div className="flex mx-4 lg-none">
+          <div className="flex mx-4 lg-none tl-click">
             <SkinOutlined />
           </div>
-          <div className="flex mx-4 lg-none">
+          <div className="flex mx-4 lg-none tl-click">
             <MailOutlined />
           </div>
-          <div className="flex mx-4 lg-none">
+          <div className="flex mx-4 lg-none tl-click">
             <SettingOutlined />
           </div>
           <Divider
@@ -146,29 +195,26 @@ const Home = () => {
               height: "1.5rem",
             }}
           />
-          <div className="flex mx-4 overflow-hidden lg-none">
-            <BoldOutlined />
-          </div>
-          <div className="flex mx-4 overflow-hidden lg-none">
-            <GithubOutlined />
-          </div>
-          <Divider
-            className="overflow-hidden mx-4 lg-none lg:mx-0 lg-none"
-            type="vertical"
-            style={{
-              borderLeftWidth: 2,
-              height: "1.5rem",
+          <a
+            className="flex mx-4 overflow-hidden lg-none tl-click"
+            onClick={(e) => {
+              e.preventDefault();
+              shell.openExternal("https://www.jialestudy.xyz/saga-home");
             }}
-          />
-          <div className="flex mx-4">
-            <MinusOutlined id="min" />
-          </div>
-          <div className="flex mx-4">
-            <ExpandAltOutlined id="max" />
-          </div>
-          <div className="flex mx-4">
-            <CloseOutlined id="exit" />
-          </div>
+          >
+            <BoldOutlined />
+          </a>
+          <a
+            className="flex mx-4 overflow-hidden lg-none tl-click"
+            onClick={(e) => {
+              e.preventDefault();
+              shell.openExternal(
+                "https://github.com/jjlstruggle/netease-music-player"
+              );
+            }}
+          >
+            <GithubOutlined />
+          </a>
         </div>
         <Modal
           centered
@@ -184,7 +230,7 @@ const Home = () => {
         </Modal>
       </Header>
       <Layout className="home flex-1">
-        <Sider width={200}>
+        <Sider width={200} className="select-none">
           <Menu
             style={{ fontSize: 16 }}
             className="h-full overflow-x-hidden overflow-y-auto "
@@ -215,20 +261,30 @@ const Home = () => {
           </Content>
         </Layout>
       </Layout>
-    </>
+    </div>
+  );
+};
+const Image = () => {
+  const imgCtx = useContext(Ctx);
+  return (
+    <img
+      src={imgCtx.imgUrl}
+      className="absolute"
+      style={{ width: "100vw", height: "100vh", top: "9" }}
+    />
   );
 };
 
 export default function App() {
   return (
-    <Layout className="flex-1 opacity-80">
+    <Layout className="flex-1">
       <Routes>
         <Route path="/home/*" element={<Home />}></Route>
         <Route path="/music" element={<LazyMusic />}></Route>
         <Route path="*" element={<Navigate to="/home/discover/recommand" />} />
       </Routes>
-      <Footer className="relative">
-        <div className="absolute w-full h-full top-0 left-0 tl-bg" />
+      <Footer className="relative opacity-80 overflow-hidden">
+        <Image />
         <Player />
       </Footer>
     </Layout>

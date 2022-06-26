@@ -26,7 +26,7 @@ export const checkMusic = async (id: number, br?: number) => {
   return p.data;
 };
 
-export const getMusicLyric = async (id: number) => {
+export const getMusicLyric = async (id: string) => {
   const p = await $.get(`/lyric?id=${id}`);
   return p.data;
 };

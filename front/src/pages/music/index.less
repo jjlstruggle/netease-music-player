@@ -1,0 +1,16 @@
+.tl-music {
+  .header {
+    @apply bg-transparent;
+  }
+  .lyric-box {
+    @apply flex-1 flex flex-col overflow-x-hidden overflow-y-auto;
+  }
+  .tl-lyric {
+    @apply text-base flex justify-center py-3;
+    transition-property: color, font-size;
+    transition-duration: 0.2s;
+  }
+  .tl-lyric.active {
+    @apply text-xl text-red-400;
+  }
+}

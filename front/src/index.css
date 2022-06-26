@@ -2,15 +2,37 @@
 @import "tailwindcss/components";
 @import "tailwindcss/utilities";
 
+::-webkit-scrollbar {
+  width: 6px;
+  height: 2px;
+  border-radius: 999px;
+}
+::-webkit-scrollbar-button {
+  width: 6px;
+  height: 0;
+}
+::-webkit-scrollbar-track {
+  background: 0 0;
+  border-radius: 5px;
+}
+::-webkit-scrollbar-thumb {
+  background: #61a8df;
+  -webkit-transition: 0.3s;
+  transition: 0.3s;
+  border-radius: 10px;
+  box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
+}
+::-webkit-scrollbar-thumb:hover {
+  background-color: #37dace;
+}
+::-webkit-scrollbar-thumb:active {
+  background-color: #17bbaf;
+}
+
 #root {
   width: 100vw;
   height: 100vh;
   overflow: hidden;
-}
-
-#page-background {
-  background: url("./assets/img/back.jpg") center no-repeat;
-  background-size: 100% 100%;
 }
 
 .flex-side-center {
@@ -49,4 +71,8 @@
 
 .pointer {
   cursor: pointer;
+}
+
+.tl-click {
+  -webkit-app-region: no-drag;
 }

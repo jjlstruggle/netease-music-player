@@ -70,7 +70,7 @@ export default function Playlist() {
   if (loading) return <div></div>;
 
   return (
-    <div className="playlist">
+    <div className="h-full overflow-x-hidden overflow-y-auto w-full">
       <div className={"playlist-top"}>
         <img src={playlistInfo.coverImgUrl} alt="图片加载失败" />
         <div>

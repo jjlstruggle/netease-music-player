@@ -36,7 +36,7 @@ function Musiclist({
   PlaylistActions &
   PlayerActions) {
   const dispatch = useDispatch();
-
+  const [loading, setLoading] = useState(true);
   const [search, setSearch] = useState({
     searchText: "",
   });
@@ -149,7 +149,6 @@ function Musiclist({
     },
   ];
 
-  const [tableHeight, setTableHeight] = useState(0);
   useEffect(() => {
     let ids = "";
     musicIds.forEach((idObj) => {
@@ -157,14 +156,8 @@ function Musiclist({
     });
     getMusicListInfo(ids.slice(0, ids.length - 1)).then((res) => {
       updateSongs(res.songs);
+      setLoading(false);
     });
-    let content = document.querySelector("#content")?.clientHeight!;
-    let head =
-      document.querySelector(".playlist-top")?.clientHeight! +
-      document.querySelector(".playlist .ant-tabs-nav")?.clientHeight! +
-      document.querySelector(".table .ant-table-header")?.clientHeight! +
-      20;
-    setTableHeight(content - head);
   }, []);
   const data = songs!.map((item, index) => ({
     index: (
@@ -190,6 +183,7 @@ function Musiclist({
 
   return (
     <Table
+      loading={loading}
       onRow={(record: { info: MusicInfo }, index) => {
         return {
           onDoubleClick: async () => {
@@ -208,12 +202,14 @@ function Musiclist({
           },
         };
       }}
-      className="table"
       // @ts-ignore
       columns={columns}
       dataSource={data}
-      pagination={false}
-      scroll={{ y: tableHeight }}
+      pagination={{
+        hideOnSinglePage: true,
+        showSizeChanger: false,
+        position: ["bottomCenter"],
+      }}
       rowClassName="select-none"
     />
   );

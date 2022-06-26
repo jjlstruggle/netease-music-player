@@ -1,4 +1,9 @@
+import { IpcRenderer } from "electron";
 import { MusicInfo } from "src/models/slice/musicInfo";
+
+declare interface Window {
+  ipcRenderer: IpcRenderer;
+}
 
 export interface PlaylistInfo {
   id: string;

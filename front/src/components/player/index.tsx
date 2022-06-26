@@ -39,6 +39,7 @@ import type { ColumnsType } from "antd/lib/table";
 import { MusicInfo, updateCurrentSongs } from "src/models/slice/musicInfo";
 import { getMusicUrl } from "src/apis/music";
 import LazyImage from "src/common/LazyImage";
+import { useLocation, useNavigate, useRoutes } from "react-router-dom";
 
 export interface DataType {
   index: JSX.Element;
@@ -133,7 +134,8 @@ const MusicMenu = memo(() => {
 function Player() {
   const [isPause, setIsPause] = useState(true);
   const curMusic = useSelector((state: ReduxState) => state.musicInfo.curSong);
-  console.log(curMusic);
+  const navigation = useNavigate();
+  const router = useLocation();
 
   return (
     <div className="player flex select-none relative">
@@ -144,6 +146,13 @@ function Player() {
             ? "flex w-1/4 h-full items-center invisible"
             : "flex w-1/4 h-full items-center"
         }
+        onClick={() => {
+          if (router.pathname === "/music") {
+            navigation(-1);
+          } else {
+            navigation("music");
+          }
+        }}
       >
         <div className="music-pic">
           <img src={curMusic.al ? curMusic.al.picUrl : ""} alt="请尝试刷新" />

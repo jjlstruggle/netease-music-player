@@ -2,6 +2,7 @@
   "name": "saga-player",
   "version": "0.1.0",
   "private": true,
+  "main": "main.js",
   "dependencies": {
     "@ant-design/icons": "^4.7.0",
     "@babel/core": "^7.16.0",
@@ -29,9 +30,10 @@
     "semver": "^7.3.5"
   },
   "scripts": {
-    "start": "node scripts/start.js",
+    "dev": "concurrently \"pnpm start\" \"wait-on http://localhost:3000 && pnpm run ele\"",
     "build": "npx cross-env GENERATE_SOURCEMAP=false node scripts/build.js",
-    "test": "node scripts/test.js"
+    "ele": "nodemon --watch ./main.js --exec \"electron .\"",
+    "start": "node scripts/start.js"
   },
   "browserslist": {
     "production": [
@@ -76,6 +78,8 @@
     "case-sensitive-paths-webpack-plugin": "^2.4.0",
     "css-loader": "^6.7.1",
     "css-minimizer-webpack-plugin": "^4.0.0",
+    "electron": "^19.0.6",
+    "electron-is-dev": "^2.0.0",
     "file-loader": "^6.2.0",
     "html-webpack-plugin": "^5.5.0",
     "less": "^4.1.3",
