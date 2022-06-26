@@ -1,6 +1,6 @@
-# NodeJs 网易云音乐播放器网页端
+# 第三方桌面端网易云音乐播放器
 
-> 基于 create-react-app antd axios 搭建,使用了 `typescript`
+> 基于 create-react-app antd axios electron搭建,使用了 `typescript`
 
 ### 目标
 
