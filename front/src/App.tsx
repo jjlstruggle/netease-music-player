@@ -270,7 +270,7 @@ const Image = () => {
     <img
       src={imgCtx.imgUrl}
       className="absolute"
-      style={{ width: "100vw", height: "100vh", top: "9" }}
+      style={{ width: "100vw", height: "100vh", top: "91vh" }}
     />
   );
 };
@@ -283,7 +283,7 @@ export default function App() {
         <Route path="/music" element={<LazyMusic />}></Route>
         <Route path="*" element={<Navigate to="/home/discover/recommand" />} />
       </Routes>
-      <Footer className="relative opacity-80 overflow-hidden">
+      <Footer className="relative opacity-70 overflow-hidden">
         <Image />
         <Player />
       </Footer>

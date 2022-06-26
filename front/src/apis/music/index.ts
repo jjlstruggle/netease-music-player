@@ -30,3 +30,8 @@ export const getMusicLyric = async (id: string) => {
   const p = await $.get(`/lyric?id=${id}`);
   return p.data;
 };
+
+export const getSimilarMuisc = async (id: string) => {
+  const p = await $.get(`/simi/song?id=${id}`);
+  return p.data;
+};

@@ -13,8 +13,11 @@ import img from "../../assets/img/bg-l.jpg";
 import { useSelector } from "react-redux";
 import { ReduxState } from "src/interface/type";
 import { handleAr } from "src/utils";
-import { getMusicLyric } from "src/apis/music";
+import { getMusicLyric, getSimilarMuisc } from "src/apis/music";
 import { Icons } from "src/App";
+import { Card } from "antd";
+
+const { Meta } = Card;
 
 const handleLyric = (lyric) => {
   let musicLyric = [],
@@ -48,8 +51,9 @@ export default function Music() {
   const imgCtx = useContext(Ctx);
   const [lyric, setLyric] = useState<any>(null);
   const [curIndex, setCurIndex] = useState(0);
+  const [simi, setSimi] = useState([]);
   const lyricBox: LegacyRef<HTMLDivElement> = useRef(null);
-
+  const indexRef = useRef(0);
   useLayoutEffect(() => {
     imgCtx.setStore(img);
   }, []);
@@ -58,12 +62,17 @@ export default function Music() {
     getMusicLyric(musicInfo.id).then((res) => {
       setLyric(handleLyric(res.lrc.lyric));
     });
+    getSimilarMuisc(musicInfo.id).then((res) => {
+      console.log(res);
+      setSimi(res.songs);
+    });
   }, []);
   useEffect(() => {
     if (!lyric) return;
     const { $audio } = window;
     const $whenTimeUpdate = () => {
       let index = 0;
+
       for (; index < lyric.nowTimeArr.length; ) {
         if ($audio.currentTime > lyric.nowTimeArr[index]) {
           index++;
@@ -71,10 +80,11 @@ export default function Music() {
           break;
         }
       }
-      console.log(index);
 
-      // $index.current = index
-      // setCurIndex(index);
+      if (index !== indexRef.current) {
+        indexRef.current = index;
+        setCurIndex(index);
+      }
     };
 
     $audio.addEventListener("timeupdate", $whenTimeUpdate);
@@ -82,6 +92,14 @@ export default function Music() {
       $audio.removeEventListener("timeupdate", $whenTimeUpdate);
     };
   }, [lyric]);
+
+  useEffect(() => {
+    if (!lyric) return;
+    const oneSliceHeight = lyricBox.current.children[0].clientHeight;
+    if (curIndex >= 4) {
+      lyricBox.current.scrollTop = oneSliceHeight * (curIndex - 4);
+    }
+  }, [curIndex]);
 
   return (
     <div className="tl-music flex flex-1 bg-black flex-col opacity-70 overflow-x-hidden overflow-y-hidden">
@@ -91,7 +109,7 @@ export default function Music() {
           <Icons />
         </div>
       </Header>
-      <div className="flex flex-1 overflow-hidden">
+      <div className="flex flex-1 overflow-x-hidden overflow-y-auto">
         <div className="w-1/2 flex flex-col items-center flex-1">
           <div className="flex items-center">
             <img
@@ -103,7 +121,7 @@ export default function Music() {
               <div className="text-lg">{handleAr(musicInfo.ar)}</div>
             </div>
           </div>
-          <div className="lyric-box pb-8 pt-8" ref={lyricBox}>
+          <div className="lyric-box pb-8 mt-8" ref={lyricBox}>
             {lyric &&
               lyric.musicLyric.map((ly: string, index) => (
                 <div
@@ -117,7 +135,24 @@ export default function Music() {
               ))}
           </div>
         </div>
-        <div className="w-1/2"></div>
+        <div
+          className="w-1/2 flex flex-wrap justify-between items-center"
+          style={{ padding: "0 64px" }}
+        >
+          <div className="text-white text-xl font-serif tracking-wide">
+            与{musicInfo.name}相似的音乐
+          </div>
+          {simi.map((song, index) => (
+            <Card
+              size="small"
+              hoverable
+              cover={<img alt="example" src={song.album.picUrl} />}
+              key={index}
+            >
+              <Meta title={song.name} description={handleAr(song.artists)} />
+            </Card>
+          ))}
+        </div>
       </div>
     </div>
   );
