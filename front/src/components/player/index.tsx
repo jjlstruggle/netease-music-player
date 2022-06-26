@@ -1,4 +1,4 @@
-import { connect } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import {
   HeartOutlined,
   RetweetOutlined,
@@ -18,6 +18,7 @@ import {
   Dispatch,
   Fragment,
   LegacyRef,
+  memo,
   SetStateAction,
   useEffect,
   useRef,
@@ -29,137 +30,131 @@ import {
   HeartBeatIcon,
   SanJiaoIcon,
 } from "../../assets/svg";
-import { handleAr, parseDt } from "../../utils";
-import throttle from "../../utils/throttle";
-import { Slider, Tooltip } from "antd";
+import { Drawer, Slider, Table, Tooltip } from "antd";
+import { ReduxState } from "src/interface/type";
+import AudioBar from "./AudioBar";
+import Volume from "./Volume";
+import { fomate, parseDt, handleAr } from "../../utils";
+import type { ColumnsType } from "antd/lib/table";
+import { MusicInfo, updateCurrentSongs } from "src/models/slice/musicInfo";
+import { getMusicUrl } from "src/apis/music";
+import LazyImage from "src/common/LazyImage";
 
-const Volume = () => {
+export interface DataType {
+  index: JSX.Element;
+  name: string;
+  playlist: string;
+  time: string;
+  musician: string;
+  key: number;
+  info: MusicInfo;
+}
+
+const columns: ColumnsType<DataType> = [
+  { title: "", dataIndex: "index", align: "center" },
+  { title: "音乐标题", dataIndex: "name", align: "center" },
+  {
+    title: "歌手",
+    dataIndex: "musician",
+    align: "center",
+  },
+  {
+    title: "专辑",
+    dataIndex: "playlist",
+    align: "center",
+  },
+  {
+    title: "时间",
+    dataIndex: "time",
+    align: "center",
+  },
+];
+
+const MusicMenu = memo(() => {
+  const [visible, setVisible] = useState(false);
+  const musicList = useSelector(
+    (state: ReduxState) => state.musicInfo.songsList
+  );
+  const dispatch = useDispatch();
+  const dataSource = musicList.map((music, index) => ({
+    index: (
+      <div className="flex-side-center">
+        <span>{fomate(index + 1)}</span>
+      </div>
+    ),
+    name: music.name,
+    playlist: music.al.name,
+    time: parseDt(music.dt / 1000),
+    musician: handleAr(music.ar),
+    key: index,
+    info: music,
+  }));
+
   return (
-    <Fragment>
-      <SoundOutlined className="mr-2" />
-      <div className="w-24">
-        <Slider
-          defaultValue={100}
-          onChange={(value) => {
-            const { $audio } = window;
-            $audio.volume = value / 100;
+    <div className="h-full items-center flex text-xl mr-6 ml-6">
+      <MenuOutlined onClick={() => setVisible(true)} />
+      <Drawer
+        visible={visible}
+        placement="right"
+        onClose={() => {
+          setVisible(false);
+        }}
+        size="large"
+      >
+        <Table
+          onRow={(record: { info: MusicInfo }) => {
+            return {
+              onDoubleClick: async () => {
+                const { id } = record.info;
+                const musicUrlInfo = await getMusicUrl(id);
+                let info = Object.assign({}, record.info, {
+                  musicUrlInfo: musicUrlInfo.data[0],
+                });
+                dispatch(updateCurrentSongs(info));
+                window.$audio.src = info.musicUrlInfo.url;
+                window.$audio.play();
+              },
+            };
+          }}
+          rowClassName="select-none"
+          dataSource={dataSource}
+          columns={columns}
+          pagination={{
+            hideOnSinglePage: true,
+            showSizeChanger: false,
+            position: ["bottomCenter"],
           }}
         />
-      </div>
-    </Fragment>
-  );
-};
-
-const AudioBar = ({
-  setIsPause,
-  setATime,
-  setCTime,
-}: {
-  setIsPause: Dispatch<SetStateAction<boolean>>;
-  setATime: Dispatch<SetStateAction<string>>;
-  setCTime: Dispatch<SetStateAction<string>>;
-}) => {
-  const [audioProgress, setAudioProgress] = useState("0%");
-  const audioProgressBar: LegacyRef<HTMLDivElement> = useRef(null);
-  const formatTitle = () => {
-    const { $audio } = window;
-    return parseDt($audio.currentTime) + " / " + parseDt($audio.duration);
-  };
-  useEffect(() => {
-    const { $audio } = window;
-    const { current: audio } = audioProgressBar;
-    const whenPlay = () => {
-      setIsPause(false);
-      setATime("99:99");
-    };
-    const whenPause = () => {
-      setIsPause(true);
-    };
-    const whenTimeUpdate = () => {
-      setCTime("99:99");
-      let rate = (100 * $audio.currentTime) / $audio.duration;
-      setAudioProgress(rate + "%");
-    };
-    const whenMouseMove = throttle((event: MouseEvent) => {
-      const { clientX } = event;
-      const rate = clientX / audio.clientWidth;
-      $audio.currentTime = rate * $audio.duration;
-    }, 100);
-    const whenMouseDown = () => {
-      document.addEventListener("mousemove", whenMouseMove.run);
-      document.addEventListener("mouseup", whenMouseUp);
-    };
-    const whenMouseUp = () => {
-      document.removeEventListener("mousemove", whenMouseMove.run);
-      document.removeEventListener("mouseup", whenMouseUp);
-    };
-    const whenClick = (event: MouseEvent) => {
-      const { clientX } = event;
-      const rate = clientX / audio.clientWidth;
-      $audio.currentTime = rate * $audio.duration;
-    };
-    $audio.addEventListener("play", whenPlay);
-    $audio.addEventListener("pause", whenPause);
-    $audio.addEventListener("timeupdate", whenTimeUpdate);
-    audio.addEventListener("mousedown", whenMouseDown);
-    audio.addEventListener("click", whenClick);
-    return () => {
-      whenMouseMove.cancel();
-      $audio.removeEventListener("play", whenPlay);
-      $audio.removeEventListener("pause", whenPause);
-      $audio.removeEventListener("timeupdate", whenTimeUpdate);
-      audio.removeEventListener("mousedown", whenMouseDown);
-      audio.removeEventListener("mousedown", whenClick);
-      document.removeEventListener("mousemove", whenMouseMove.run);
-      document.removeEventListener("mouseup", whenMouseUp);
-    };
-  }, []);
-  return (
-    <div className="audioProgressBar" ref={audioProgressBar}>
-      <div
-        style={{ width: audioProgress }}
-        className="audioProgressTrack flex items-center"
-      >
-        <Tooltip color="red" title={formatTitle}>
-          <div
-            style={{
-              width: 14,
-              height: 14,
-              backgroundColor: "#141414",
-              borderColor: "#153450",
-              marginTop: -5,
-            }}
-            className="absolute right-0 top-0 rounded-full duration-300 border-gray-200 hanlder border-2"
-          />
-        </Tooltip>
-      </div>
+      </Drawer>
     </div>
   );
-};
-function Player({ currentMusicInfo }: any) {
-  const [ctime, setCTime] = useState("00:00");
-  const [atime, setATime] = useState("00:00");
+});
+
+function Player() {
   const [isPause, setIsPause] = useState(true);
+  const curMusic = useSelector((state: ReduxState) => state.musicInfo.curSong);
+  console.log(curMusic);
 
   return (
     <div className="player flex select-none relative">
-      <AudioBar
-        setIsPause={setIsPause}
-        setATime={setATime}
-        setCTime={setCTime}
-      />
-      <div className="flex w-1/4 h-full items-center">
+      <AudioBar setIsPause={setIsPause} />
+      <div
+        className={
+          JSON.stringify(curMusic) === "{}"
+            ? "flex w-1/4 h-full items-center invisible"
+            : "flex w-1/4 h-full items-center"
+        }
+      >
         <div className="music-pic">
-          <img
-            src="https://www.mooyuu.com/uploadfile/2021/1011/thumb_1000_0_20211011032316905.png"
-            alt="请尝试刷新"
-          />
+          <img src={curMusic.al ? curMusic.al.picUrl : ""} alt="请尝试刷新" />
         </div>
         <div>
           <div className="text-lg">
-            <div className="text-sm mr-2 mb-1">痛失吾爱，满目破败</div>
+            <div className="text-sm mr-2 mb-1">{curMusic.name || ""}</div>
           </div>
-          <div className="text-xs">佛耶戈</div>
+          <div className="text-xs">
+            {curMusic.ar ? handleAr(curMusic.ar) : ""}
+          </div>
         </div>
       </div>
       <div className="power-info">POWERED BY SAGA</div>
@@ -196,9 +191,7 @@ function Player({ currentMusicInfo }: any) {
       <div className="h-full items-center flex text-xl mr-6 ml-6">
         <Volume />
       </div>
-      <div className="h-full items-center flex text-xl mr-6 ml-6">
-        <MenuOutlined />
-      </div>
+      <MusicMenu />
     </div>
   );
 }

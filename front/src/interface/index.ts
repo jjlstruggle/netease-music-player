@@ -1,3 +1,5 @@
+import { MusicInfo } from "src/models/slice/musicInfo";
+
 export interface PlaylistInfo {
   id: string;
   name: string;
@@ -49,26 +51,12 @@ export interface ReduxState {
 }
 
 export interface Ar {
-  id: number;
+  id: string;
   name: string;
 }
 
 interface Quality {
   br: number;
-}
-export interface MusicInfo {
-  al: {
-    id: number;
-    name: string;
-    picUrl: string;
-  };
-  ar: Ar[];
-  name: string;
-  id: number;
-  dt: number;
-  h?: Quality;
-  l?: Quality;
-  m?: Quality;
 }
 
 export interface Comment {

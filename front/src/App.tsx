@@ -30,10 +30,18 @@ import { ItemType } from "antd/lib/menu/hooks/useItems";
 import useLazy from "./hooks/useLazy";
 
 const LazyPlayList = useLazy(import("./pages/playlist/index"));
-
+const LazyMusic = useLazy(import("./pages/music"));
 const { Header, Content, Sider, Footer } = Layout;
 
-const Home = ({ playlist }: { playlist: string[] }) => {
+const Home = () => {
+  const [playlist, setPlaylist] = useState(["我喜欢的音乐"]);
+  const [isModalVisible, setIsModalVisible] = useState(false);
+  const [userInfo, setUserInfo] = useState({
+    avatar: "",
+    name: "",
+    vipStatus: 0,
+  });
+
   const items: ItemType[] = useMemo(
     () => [
       { label: "发现音乐", key: "1" },
@@ -80,53 +88,7 @@ const Home = ({ playlist }: { playlist: string[] }) => {
     [playlist]
   );
   return (
-    <Layout className="home flex-1">
-      <Sider width={200}>
-        <Menu
-          style={{ fontSize: 16 }}
-          className="h-full overflow-x-hidden overflow-y-auto "
-          defaultSelectedKeys={["1"]}
-          defaultOpenKeys={["sub1"]}
-          mode="inline"
-          items={items}
-        />
-      </Sider>
-      <Layout>
-        <Content
-          id="content"
-          className="flex flex-1 overflow-hidden shadow-lg px-6"
-        >
-          <Routes>
-            <Route path="/discover/*" element={<Discover />}></Route>
-            <Route path="/podcast"></Route>
-            <Route path="/video"></Route>
-            <Route path="/focus"></Route>
-            <Route path="/live"></Route>
-            <Route path="/privateFm"></Route>
-            <Route path="/playlist" element={<LazyPlayList />}></Route>
-            <Route
-              path="*"
-              element={<Navigate to="/home/discover/recommand" />}
-            />
-          </Routes>
-        </Content>
-      </Layout>
-    </Layout>
-  );
-};
-
-export default function App() {
-  const [userInfo, setUserInfo] = useState({
-    avatar: "",
-    name: "",
-    vipStatus: 0,
-  });
-
-  const [isModalVisible, setIsModalVisible] = useState(false);
-  const [playlist, setPlaylist] = useState(["我喜欢的音乐"]);
-
-  return (
-    <Layout className="flex-1 opacity-80">
+    <>
       <Header className="header flex items-center justify-between select-none ">
         <div className="flex items-center">
           <div className="logo flex items-center">
@@ -221,12 +183,50 @@ export default function App() {
           <p>Some contents...</p>
         </Modal>
       </Header>
+      <Layout className="home flex-1">
+        <Sider width={200}>
+          <Menu
+            style={{ fontSize: 16 }}
+            className="h-full overflow-x-hidden overflow-y-auto "
+            defaultSelectedKeys={["1"]}
+            defaultOpenKeys={["sub1"]}
+            mode="inline"
+            items={items}
+          />
+        </Sider>
+        <Layout>
+          <Content
+            id="content"
+            className="flex flex-1 overflow-hidden shadow-lg px-6"
+          >
+            <Routes>
+              <Route path="/discover/*" element={<Discover />}></Route>
+              <Route path="/podcast"></Route>
+              <Route path="/video"></Route>
+              <Route path="/focus"></Route>
+              <Route path="/live"></Route>
+              <Route path="/privateFm"></Route>
+              <Route path="/playlist" element={<LazyPlayList />}></Route>
+              <Route
+                path="*"
+                element={<Navigate to="/home/discover/recommand" />}
+              />
+            </Routes>
+          </Content>
+        </Layout>
+      </Layout>
+    </>
+  );
+};
+
+export default function App() {
+  return (
+    <Layout className="flex-1 opacity-80">
       <Routes>
-        <Route path="/home/*" element={<Home playlist={playlist} />}></Route>
-        <Route path="/music"></Route>
+        <Route path="/home/*" element={<Home />}></Route>
+        <Route path="/music" element={<LazyMusic />}></Route>
         <Route path="*" element={<Navigate to="/home/discover/recommand" />} />
       </Routes>
-
       <Footer className="relative">
         <div className="absolute w-full h-full top-0 left-0 tl-bg" />
         <Player />

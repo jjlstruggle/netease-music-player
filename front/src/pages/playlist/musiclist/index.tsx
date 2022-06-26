@@ -2,7 +2,6 @@ import { getMusicListInfo } from "../../../apis/playlist";
 import {
   PlaylistState,
   PlaylistActions,
-  MusicInfo,
   PlayerActions,
 } from "../../../interface";
 import { Table, Input, Space, Button, InputRef } from "antd";
@@ -14,11 +13,13 @@ import {
   SearchOutlined,
   HeartOutlined,
   DownloadOutlined,
+  SoundFilled,
 } from "@ant-design/icons";
 import { getMusicUrl } from "../../../apis/music";
 import {
   updateCurrentSongs,
   updateSongsList,
+  MusicInfo,
 } from "../../../models/slice/musicInfo";
 import useLazy from "src/hooks/useLazy";
 import { useDispatch } from "react-redux";
@@ -40,7 +41,9 @@ function Musiclist({
     searchText: "",
   });
 
-  const [songs, updateSongs] = useState([]);
+  const [curIndex, setCurIndex] = useState<number | null>(null);
+
+  const [songs, updateSongs] = useState([] as MusicInfo[]);
 
   const handleSearch = (selectedKeys: string[], confirm: Function) => {
     confirm();
@@ -166,7 +169,13 @@ function Musiclist({
   const data = songs!.map((item, index) => ({
     index: (
       <div className="flex-side-center">
-        <span>{fomate(index + 1)}</span>
+        {curIndex === index ? (
+          <div className="text-blue-400">
+            <SoundFilled />
+          </div>
+        ) : (
+          <span>{fomate(index + 1)}</span>
+        )}
         <HeartOutlined />
         <DownloadOutlined />
       </div>
@@ -181,15 +190,17 @@ function Musiclist({
 
   return (
     <Table
-      onRow={(record: { info: MusicInfo }) => {
+      onRow={(record: { info: MusicInfo }, index) => {
         return {
           onDoubleClick: async () => {
+            setCurIndex(index);
             const { id } = record.info;
             const musicUrlInfo = await getMusicUrl(id);
             let info = Object.assign({}, record.info, {
-              musicUrlInfo: musicUrlInfo.data[0],
+              musicUrlInfo: musicUrlInfo.data,
             });
             dispatch(updateCurrentSongs(info));
+            dispatch(updateSongsList(songs));
             // @ts-ignore
             window.$audio.src = info.musicUrlInfo.url;
             // @ts-ignore
@@ -203,6 +214,7 @@ function Musiclist({
       dataSource={data}
       pagination={false}
       scroll={{ y: tableHeight }}
+      rowClassName="select-none"
     />
   );
 }

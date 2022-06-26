@@ -1,11 +1,17 @@
 import $ from "axios";
 
-export const getMusicUrl = async (id: number, br?: number) => {
+export const getMusicUrl = async (id: string, br?: number) => {
   let p;
   if (br) {
     p = await $.get(`/song/url?id=${id}&br=${br}`);
   } else {
+    p = await $.get(`/song/download/url?id=${id}`);
+  }
+  if (!p.data.data.url) {
     p = await $.get(`/song/url?id=${id}`);
+    return {
+      data: p.data.data[0],
+    };
   }
   return p.data;
 };
