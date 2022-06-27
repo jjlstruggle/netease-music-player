@@ -1,5 +1,6 @@
 import { Header } from "antd/lib/layout/layout";
 import {
+  Fragment,
   LegacyRef,
   useContext,
   useEffect,
@@ -14,9 +15,14 @@ import { useSelector } from "react-redux";
 import { ReduxState } from "src/interface/type";
 import { handleAr } from "src/utils";
 import { getMusicLyric, getSimilarMuisc } from "src/apis/music";
-import { Icons } from "src/App";
+import {
+  MinusOutlined,
+  CloseOutlined,
+  ExpandOutlined,
+  CompressOutlined,
+} from "@ant-design/icons";
 import { Card } from "antd";
-
+import QueueAnim from "rc-queue-anim";
 const { Meta } = Card;
 
 const handleLyric = (lyric) => {
@@ -52,6 +58,50 @@ const handleLyric = (lyric) => {
     isPure,
   };
 };
+
+const Icons = () => {
+  const { ipcRenderer } = window;
+  const [isMax, setIsMax] = useState(false);
+  useLayoutEffect(() => {
+    ipcRenderer.invoke("windowIsMaximized").then((res) => {
+      setIsMax(res);
+    });
+  }, []);
+  return (
+    <>
+      <div
+        style={{ backgroundColor: "rgb(255,198,46)" }}
+        className="flex mx-2 rounded-full p-1 cursor-pointer tl-click text-transparent hover:text-white transition-colors duration-200"
+        onClick={() => {
+          ipcRenderer.send("min");
+        }}
+      >
+        <MinusOutlined />
+      </div>
+      <div
+        style={{ backgroundColor: "rgb(40,201,64)" }}
+        className="flex text-transparent mx-2 rounded-full p-1 cursor-pointer tl-click hover:text-white transition-colors duration-200"
+        onClick={async () => {
+          const res = await ipcRenderer.invoke("windowIsMaximized");
+          setIsMax(res);
+          ipcRenderer.send("max");
+        }}
+      >
+        {isMax ? <CompressOutlined /> : <ExpandOutlined />}
+      </div>
+      <div
+        style={{ backgroundColor: "rgb(255,95,87)" }}
+        className="flex text-transparent mx-2 rounded-full p-1 cursor-pointer tl-click hover:text-white transition-colors duration-200"
+        onClick={() => {
+          ipcRenderer.send("close");
+        }}
+      >
+        <CloseOutlined />
+      </div>
+    </>
+  );
+};
+
 export default function Music() {
   const imgCtx = useContext(Ctx);
   const [lyric, setLyric] = useState<any>(null);
@@ -151,18 +201,27 @@ export default function Music() {
           </div>
           <div
             className="flex flex-wrap justify-between items-center"
-            style={{ padding: "0 84px" }}
+            style={{ padding: "0 54px" }}
           >
-            {simi.map((song, index) => (
-              <Card
-                size="small"
-                hoverable
-                cover={<img alt="example" src={song.album.picUrl} />}
-                key={index}
-              >
-                <Meta title={song.name} description={handleAr(song.artists)} />
-              </Card>
-            ))}
+            <QueueAnim
+              component={Fragment}
+              delay={300}
+              animConfig={{ opacity: [1, 0], translateY: [0, 50] }}
+            >
+              {simi.map((song, index) => (
+                <Card
+                  size="small"
+                  hoverable
+                  cover={<img alt="example" src={song.album.picUrl} />}
+                  key={index}
+                >
+                  <Meta
+                    title={song.name}
+                    description={handleAr(song.artists)}
+                  />
+                </Card>
+              ))}
+            </QueueAnim>
           </div>
         </div>
       </div>

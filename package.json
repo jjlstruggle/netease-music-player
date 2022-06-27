@@ -1,0 +1,48 @@
+{
+  "name": "saga-player",
+  "version": "1.0.0",
+  "description": "> 基于 create-react-app antd axios electron搭建,使用了 `typescript`",
+  "main": "./front/main.js",
+  "scripts": {
+    "pack:win": "npx cross-env NODE_ENV=production electron-builder -w --x64 "
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/jjlstruggle/netease-music-player.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/jjlstruggle/netease-music-player/issues"
+  },
+  "homepage": "https://github.com/jjlstruggle/netease-music-player#readme",
+  "devDependencies": {
+    "electron": "^19.0.6",
+    "electron-builder": "^23.1.0"
+  },
+  "build": {
+    "compression": "maximum",
+    "productName": "tailwindMusic",
+    "directories": {
+      "output": "tailwindMusic"
+    },
+    "asar": true,
+    "win": {
+      "icon": "/ico.png",
+      "target": [
+        "dir"
+      ]
+    },
+    "files": [
+      "./front/build",
+      "./front/main.js",
+      "./front/preload.js"
+    ],
+    "nsis": {
+      "oneClick": false,
+      "allowToChangeInstallationDirectory": true,
+      "createDesktopShortcut": "always",
+      "createStartMenuShortcut": true
+    }
+  }
+}

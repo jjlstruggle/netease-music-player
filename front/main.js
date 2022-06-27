@@ -1,6 +1,7 @@
 const { BrowserWindow, app, ipcMain } = require("electron");
 const path = require("path");
-const isDev = require('electron-is-dev');
+const isDev = process.env.NODE_ENV === "development"
+
 function createWindow() {
     // 创建一个浏览器窗口.
     let window = new BrowserWindow({
@@ -19,7 +20,7 @@ function createWindow() {
     if (isDev) {
         window.loadURL("http://localhost:3000");
     } else {
-        window.loadFile(path.join(__dirname, '../front/build/index.html'))
+        window.loadFile(path.join(__dirname, './build/index.html'))
     }
 
     window.on("closed", function () {

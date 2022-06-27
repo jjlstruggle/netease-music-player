@@ -21,7 +21,7 @@ import {
   ExpandOutlined,
   CompressOutlined,
 } from "@ant-design/icons";
-import { useContext, useLayoutEffect, useMemo, useState } from "react";
+import { lazy, useContext, useLayoutEffect, useMemo, useState } from "react";
 import {
   Route,
   Routes,
@@ -53,7 +53,17 @@ export const Icons = () => {
   return (
     <>
       <div
-        className="flex mx-3 bg-red-600 rounded-full p-1 cursor-pointer tl-click hover:text-blue-300"
+        style={{ backgroundColor: "rgb(255,95,87)" }}
+        className="flex text-transparent mx-2 rounded-full p-1 cursor-pointer tl-click hover:text-white transition-colors duration-200"
+        onClick={() => {
+          ipcRenderer.send("close");
+        }}
+      >
+        <CloseOutlined />
+      </div>
+      <div
+        style={{ backgroundColor: "rgb(255,198,46)" }}
+        className="flex mx-2 rounded-full p-1 cursor-pointer tl-click text-transparent hover:text-white transition-colors duration-200"
         onClick={() => {
           ipcRenderer.send("min");
         }}
@@ -61,7 +71,8 @@ export const Icons = () => {
         <MinusOutlined />
       </div>
       <div
-        className="flex mx-3 bg-yellow-400 rounded-full p-1 cursor-pointer tl-click hover:text-blue-300"
+        style={{ backgroundColor: "rgb(40,201,64)" }}
+        className="flex text-transparent mx-2 rounded-full p-1 cursor-pointer tl-click hover:text-white transition-colors duration-200"
         onClick={async () => {
           const res = await ipcRenderer.invoke("windowIsMaximized");
           setIsMax(res);
@@ -69,14 +80,6 @@ export const Icons = () => {
         }}
       >
         {isMax ? <CompressOutlined /> : <ExpandOutlined />}
-      </div>
-      <div
-        className="flex mx-3 bg-green-200 rounded-full p-1 cursor-pointer tl-click hover:text-blue-300"
-        onClick={() => {
-          ipcRenderer.send("close");
-        }}
-      >
-        <CloseOutlined />
       </div>
     </>
   );
@@ -92,7 +95,6 @@ const Head = () => {
     vipStatus: 0,
   });
   const history = useHistory();
-  console.log(history);
 
   return (
     <Header className="header flex items-center justify-between select-none ">
