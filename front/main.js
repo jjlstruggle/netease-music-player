@@ -3,7 +3,7 @@ const path = require("path");
 const isDev = require('electron-is-dev');
 function createWindow() {
     // 创建一个浏览器窗口.
-    const window = new BrowserWindow({
+    let window = new BrowserWindow({
         width: 1580,
         height: 740,
         minWidth: 1024,

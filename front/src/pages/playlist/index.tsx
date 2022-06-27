@@ -20,7 +20,6 @@ import "./index.less";
 import { PlaylistDetailInfo } from "../../interface";
 import { handleCount, handleTag, parseTime } from "../../utils";
 import Musiclist from "./musiclist";
-import Collector from "./collector";
 import Comment from "./comment";
 
 const { TabPane } = Tabs;
@@ -30,13 +29,14 @@ export default function Playlist() {
   const fake: MutableRefObject<HTMLDivElement | null> = useRef(null);
   const descript: MutableRefObject<HTMLDivElement | null> = useRef(null);
   const history = useLocation();
+
   const [playlistInfo, setPlaylistInfo] = useState({} as PlaylistDetailInfo);
   const [isFold, setIsFold] = useState(true);
   const [loading, setLoading] = useState(true);
   const [showFold, setShowFold] = useState(false);
   const pid = history.search.split("=")[1];
 
-  const tabs = ["歌曲列表", `评论(${commendCount})`, "收藏者"];
+  const tabs = ["歌曲列表", `评论(${commendCount})`];
   const getComponents = useCallback(
     (tab: string) => {
       switch (tab) {
@@ -44,8 +44,7 @@ export default function Playlist() {
           return <Musiclist musicIds={playlistInfo.trackIds} />;
         case tabs[1]:
           return <Comment pid={pid} />;
-        case tabs[2]:
-          return <Collector />;
+
         default:
           break;
       }
@@ -158,7 +157,12 @@ export default function Playlist() {
           </div>
         </div>
       </div>
-      <Tabs defaultActiveKey="歌曲列表" size="large" className="tabBox">
+      <Tabs
+        destroyInactiveTabPane
+        defaultActiveKey="歌曲列表"
+        size="large"
+        className="tabBox"
+      >
         {tabs.map((tab, index) => (
           <TabPane tab={tab} key={index}>
             {getComponents(tab)}

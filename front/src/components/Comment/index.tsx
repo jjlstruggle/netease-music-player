@@ -19,23 +19,22 @@ const Comment = (props: any) => {
       </span>
     </Tooltip>,
     <Tooltip key="comment-basic-share" title="分享">
-      <span>
-        <ShareIcon
-          style={{
-            minWidth: 15,
-          }}
-        />
+      <span className="text-4xl">
+        <ShareIcon />
       </span>
     </Tooltip>,
     <Tooltip key="comment-basic-reply" title="回复">
-      <span>
+      <span className="text-4xl">
         <MessageOutlined />
       </span>
     </Tooltip>,
   ];
+
   return (
     <Comments
-      {...props}
+      author={props.author}
+      avatar={props.avatar}
+      content={props.content}
       actions={actions}
       datetime={
         <Tooltip title={dayjs().format("YYYY-MM-DD HH:mm:ss")}>

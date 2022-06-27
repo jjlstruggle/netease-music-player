@@ -7,7 +7,6 @@ import "./index.css";
 import App from "./App";
 import store from "./models";
 import "./apis";
-import "./renderer";
 import ImgProvider, { Ctx } from "./context/back";
 import { useContext } from "react";
 window["$audio"] = new Audio(test);

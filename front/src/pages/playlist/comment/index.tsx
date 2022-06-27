@@ -1,38 +1,49 @@
 import "./index.less";
 import { ChangeEvent, useEffect, useState } from "react";
-import { Input, Button, Tooltip, Avatar } from "antd";
+import { Input, Button, Tooltip, Avatar, Pagination } from "antd";
 import { AtIcon } from "../../../assets/svg";
 import { BorderlessTableOutlined } from "@ant-design/icons";
 import { getPlaylistComment } from "../../../apis/playlist";
 import { Comment as CommentType } from "../../../interface";
 import CommentComponent from "../../../components/Comment";
-import dayjs from "dayjs";
-import relativeTime from "dayjs/plugin/relativeTime";
 const { TextArea } = Input;
-dayjs.extend(relativeTime);
 export default function Comment({ pid }: { pid: string }) {
   const [value, setValue] = useState("");
-  const [contentHeight, setContentHeight] = useState(0);
   const [comment, setComment] = useState([]);
+  const [total, setTotal] = useState(0);
+  const [page, setPage] = useState(1);
   useEffect(() => {
-    getPlaylistComment(pid).then((res) => {
+    getPlaylistComment(pid, page).then((res) => {
       setComment(res.comments);
+      setTotal(res.total);
     });
-    let content = document.querySelector("#content")?.clientHeight!;
-    let head =
-      document.querySelector(".playlist-top")?.clientHeight! +
-      document.querySelector(".playlist .ant-tabs-nav")?.clientHeight! +
-      document.querySelector(".comment .comment-head")?.clientHeight! +
-      36;
-    setContentHeight(content - head);
-  }, []);
+  }, [page]);
   const onChange = (e: ChangeEvent<HTMLTextAreaElement>) => {
     setValue(e.target.value);
   };
 
   return (
     <div className="comment">
-      <div className="comment-head">
+      <div className="comment-container">
+        {comment.map((item: CommentType, index) => (
+          <CommentComponent
+            likeCount={item.likedCount}
+            hasLiked={item.liked}
+            key={index}
+            author={item.user.nickname}
+            avatar={
+              <Avatar
+                src={item.user.avatarUrl}
+                alt={item.user.nickname}
+                size="large"
+                className="tl-avatar"
+              />
+            }
+            content={item.content}
+          />
+        ))}
+      </div>
+      <div className="comment-head px-12">
         <TextArea
           showCount
           maxLength={140}
@@ -42,39 +53,25 @@ export default function Comment({ pid }: { pid: string }) {
         />
         <br />
         <div className="flex-side-center" style={{ marginTop: 5 }}>
-          <div>
+          <div className="text-xl">
             <AtIcon
               style={{ minWidth: 20, minHeight: 20, marginRight: "21px" }}
             />
-            <BorderlessTableOutlined style={{ fontSize: 22 }} />
+            <BorderlessTableOutlined />
           </div>
           <Button shape="round">评论</Button>
         </div>
       </div>
-      <div
-        className="comment-container"
-        style={{
-          height: contentHeight,
-        }}
-      >
-        {comment.map((item: CommentType, index) => (
-          <CommentComponent
-            likeCount={item.likedCount}
-            hasLiked={item.liked}
-            key={index}
-            author={item.user.nickname}
-            avatar={
-              <Avatar src={item.user.avatarUrl} alt={item.user.nickname} />
-            }
-            content={item.content}
-            datetime={
-              <Tooltip title={dayjs(item.time).format("YYYY-MM-DD HH:mm:ss")}>
-                <span>{dayjs().fromNow()}</span>
-              </Tooltip>
-            }
-          />
-        ))}
-      </div>
+      <Pagination
+        hideOnSinglePage
+        total={total}
+        defaultPageSize={20}
+        current={page}
+        pageSize={20}
+        showSizeChanger={false}
+        onChange={(page) => setPage(page)}
+        className="flex justify-center"
+      />
     </div>
   );
 }

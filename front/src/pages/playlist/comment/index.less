@@ -1,8 +1,15 @@
 .comment {
-  overflow: hidden;
-}
-
-.comment-container {
-  overflow: hidden auto;
-  margin-top: 5px;
+  @apply overflow-hidden pb-12;
+  .ant-pagination button {
+    @apply flex justify-center items-center;
+  }
+  .comment-container {
+    @apply overflow-x-hidden overflow-y-auto mt-1 px-12;
+    .ant-comment-actions > li > span {
+      @apply text-lg mr-8;
+    }
+    .tl-avatar img {
+      @apply w-16 h-16 rounded-full;
+    }
+  }
 }

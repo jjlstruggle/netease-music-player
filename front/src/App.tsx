@@ -21,22 +21,35 @@ import {
   ExpandOutlined,
   CompressOutlined,
 } from "@ant-design/icons";
-import { useContext, useMemo, useState } from "react";
-import { Route, Routes, Navigate, useNavigate } from "react-router-dom";
-import "./renderer";
+import { useContext, useLayoutEffect, useMemo, useState } from "react";
+import {
+  Route,
+  Routes,
+  Navigate,
+  useNavigate,
+  useLocation,
+} from "react-router-dom";
 import Discover from "./pages/discover";
 import { PodcastIcon, MyCollectIcon, YinFuIcon } from "./assets/svg";
 import Player from "./components/player";
 import { ItemType } from "antd/lib/menu/hooks/useItems";
 import useLazy from "./hooks/useLazy";
 import { Ctx } from "./context/back";
+import useHistory from "./hooks/useHistroy";
+
 const LazyPlayList = useLazy(import("./pages/playlist/index"));
 const LazyMusic = useLazy(import("./pages/music"));
+
 const { Header, Content, Sider, Footer } = Layout;
 
 export const Icons = () => {
   const { ipcRenderer } = window;
   const [isMax, setIsMax] = useState(false);
+  useLayoutEffect(() => {
+    ipcRenderer.invoke("windowIsMaximized").then((res) => {
+      setIsMax(res);
+    });
+  }, []);
   return (
     <>
       <div
@@ -69,15 +82,138 @@ export const Icons = () => {
   );
 };
 
-const Home = () => {
+const Head = () => {
+  const { shell } = window;
   const navigate = useNavigate();
-  const [playlist, setPlaylist] = useState(["我喜欢的音乐"]);
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [userInfo, setUserInfo] = useState({
     avatar: "",
     name: "",
     vipStatus: 0,
   });
+  const history = useHistory();
+  console.log(history);
+
+  return (
+    <Header className="header flex items-center justify-between select-none ">
+      <div className="flex items-center">
+        <Icons />
+      </div>
+      <div className="flex items-center">
+        <div className="logo flex items-center">
+          <img
+            className="rounded-full w-10 h-10 mr-4"
+            src={logo}
+            alt="图片加载失败"
+          />
+        </div>
+        <div className="text-xl flex items-center ml-5 tl-click">
+          <span
+            className={
+              history.stack.length > 1
+                ? "text-blue-500 p-1 bg-slate-200 rounded-full flex justify-center items-center mr-2 cursor-pointer"
+                : "text-neutral-50 p-1 bg-slate-200 rounded-full flex justify-center items-center mr-2 cursor-pointer"
+            }
+            onClick={() => {
+              navigate(-1);
+            }}
+          >
+            <LeftOutlined />
+          </span>
+          <span
+            className={
+              history.type.at(-1) == "pop"
+                ? "text-blue-500 p-1 bg-slate-200 rounded-full flex justify-center items-center mr-2 cursor-pointer"
+                : "text-neutral-50 p-1 bg-slate-200 rounded-full flex justify-center items-center mr-2 cursor-pointer"
+            }
+            onClick={() => {
+              if (history.type.at(-1) == "pop") {
+                navigate(1);
+              }
+            }}
+          >
+            <RightOutlined />
+          </span>
+        </div>
+        <div className="w-80 flex items-center overflow-hidden tl-click">
+          <Input.Search placeholder="搜索音乐，视频，歌词，电台" />
+        </div>
+      </div>
+      <div className="settings flex text-white items-center text-xl">
+        <div
+          className="flex items-center cursor-pointer mx-4 tl-click"
+          onClick={() => setIsModalVisible(true)}
+        >
+          {userInfo.avatar ? (
+            <img src={userInfo.avatar} alt="图片加载失败" />
+          ) : (
+            <UserOutlined />
+          )}
+        </div>
+        <div className="name cursor-pointer text-sm flex mx-4 tl-click">
+          <span>{userInfo.name || "未登录"}</span>
+          <CaretDownOutlined />
+          <span className="lg-none">
+            {userInfo.vipStatus === 0 ? "开通vip" : "vip"}
+          </span>
+        </div>
+        <div className="flex mx-4 lg-none tl-click">
+          <SkinOutlined />
+        </div>
+        <div className="flex mx-4 lg-none tl-click">
+          <MailOutlined />
+        </div>
+        <div className="flex mx-4 lg-none tl-click">
+          <SettingOutlined />
+        </div>
+        <Divider
+          className="mx-4"
+          type="vertical"
+          style={{
+            borderLeftWidth: 2,
+            height: "1.5rem",
+          }}
+        />
+        <a
+          className="flex mx-4 overflow-hidden lg-none tl-click"
+          onClick={(e) => {
+            e.preventDefault();
+            shell.openExternal("https://www.jialestudy.xyz/saga-home");
+          }}
+        >
+          <BoldOutlined />
+        </a>
+        <a
+          className="flex mx-4 overflow-hidden lg-none tl-click"
+          onClick={(e) => {
+            e.preventDefault();
+            shell.openExternal(
+              "https://github.com/jjlstruggle/netease-music-player"
+            );
+          }}
+        >
+          <GithubOutlined />
+        </a>
+      </div>
+      <Modal
+        centered
+        closable
+        footer={null}
+        maskClosable
+        visible={isModalVisible}
+        onCancel={() => setIsModalVisible(false)}
+      >
+        <p>Some contents...</p>
+        <p>Some contents...</p>
+        <p>Some contents...</p>
+      </Modal>
+    </Header>
+  );
+};
+
+const Home = () => {
+  const [playlist, setPlaylist] = useState(["我喜欢的音乐"]);
+
   const items: ItemType[] = useMemo(
     () => [
       { label: "发现音乐", key: "1" },
@@ -123,112 +259,9 @@ const Home = () => {
     ],
     [playlist]
   );
-  const { shell } = window;
   return (
     <div className="flex flex-1 flex-col overflow-auto opacity-80">
-      <Header className="header flex items-center justify-between select-none ">
-        <div className="flex items-center">
-          <Icons />
-        </div>
-        <div className="flex items-center">
-          <div className="logo flex items-center">
-            <img
-              className="rounded-full w-10 h-10 mr-4"
-              src={logo}
-              alt="图片加载失败"
-            />
-          </div>
-          <div className="text-xl flex items-center ml-5 tl-click">
-            <span
-              className="text-neutral-50 p-1 bg-slate-200 rounded-full flex justify-center items-center mr-2 cursor-pointer"
-              onClick={() => {
-                navigate(-1);
-              }}
-            >
-              <LeftOutlined />
-            </span>
-            <span
-              className="mr-10 text-neutral-50 p-1 bg-slate-200 rounded-full  flex justify-center items-center cursor-pointer"
-              onClick={() => {
-                navigate(1);
-              }}
-            >
-              <RightOutlined />
-            </span>
-          </div>
-          <div className="w-80 flex items-center overflow-hidden tl-click">
-            <Input.Search placeholder="搜索音乐，视频，歌词，电台" />
-          </div>
-        </div>
-        <div className="settings flex text-white items-center text-xl">
-          <div
-            className="flex items-center cursor-pointer mx-4 tl-click"
-            onClick={() => setIsModalVisible(true)}
-          >
-            {userInfo.avatar ? (
-              <img src={userInfo.avatar} alt="图片加载失败" />
-            ) : (
-              <UserOutlined />
-            )}
-          </div>
-          <div className="name cursor-pointer text-sm flex mx-4 tl-click">
-            <span>{userInfo.name || "未登录"}</span>
-            <CaretDownOutlined />
-            <span className="lg-none">
-              {userInfo.vipStatus === 0 ? "开通vip" : "vip"}
-            </span>
-          </div>
-          <div className="flex mx-4 lg-none tl-click">
-            <SkinOutlined />
-          </div>
-          <div className="flex mx-4 lg-none tl-click">
-            <MailOutlined />
-          </div>
-          <div className="flex mx-4 lg-none tl-click">
-            <SettingOutlined />
-          </div>
-          <Divider
-            className="mx-4"
-            type="vertical"
-            style={{
-              borderLeftWidth: 2,
-              height: "1.5rem",
-            }}
-          />
-          <a
-            className="flex mx-4 overflow-hidden lg-none tl-click"
-            onClick={(e) => {
-              e.preventDefault();
-              shell.openExternal("https://www.jialestudy.xyz/saga-home");
-            }}
-          >
-            <BoldOutlined />
-          </a>
-          <a
-            className="flex mx-4 overflow-hidden lg-none tl-click"
-            onClick={(e) => {
-              e.preventDefault();
-              shell.openExternal(
-                "https://github.com/jjlstruggle/netease-music-player"
-              );
-            }}
-          >
-            <GithubOutlined />
-          </a>
-        </div>
-        <Modal
-          centered
-          closable
-          footer={null}
-          maskClosable
-          visible={isModalVisible}
-          onCancel={() => setIsModalVisible(false)}
-        >
-          <p>Some contents...</p>
-          <p>Some contents...</p>
-          <p>Some contents...</p>
-        </Modal>
-      </Header>
+      <Head />
       <Layout className="home flex-1">
         <Sider width={200} className="select-none">
           <Menu

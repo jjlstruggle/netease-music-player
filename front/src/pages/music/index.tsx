@@ -22,7 +22,8 @@ const { Meta } = Card;
 const handleLyric = (lyric) => {
   let musicLyric = [],
     time_arr = [],
-    nowTimeArr = [];
+    nowTimeArr = [],
+    isPure = false;
 
   if (lyric == null) {
     return { musicLyric, nowTimeArr };
@@ -42,9 +43,13 @@ const handleLyric = (lyric) => {
     nowTimeArr.push(Time);
   }
   nowTimeArr.pop();
+  if (musicLyric[0] == "纯音乐，请欣赏") {
+    isPure = true;
+  }
   return {
     musicLyric,
     nowTimeArr,
+    isPure,
   };
 };
 export default function Music() {
@@ -63,7 +68,6 @@ export default function Music() {
       setLyric(handleLyric(res.lrc.lyric));
     });
     getSimilarMuisc(musicInfo.id).then((res) => {
-      console.log(res);
       setSimi(res.songs);
     });
   }, []);
@@ -110,7 +114,7 @@ export default function Music() {
         </div>
       </Header>
       <div className="flex flex-1 overflow-x-hidden overflow-y-auto">
-        <div className="w-1/2 flex flex-col items-center flex-1">
+        <div className="w-1/2 flex flex-col items-center ">
           <div className="flex items-center">
             <img
               src={musicInfo.al.picUrl}
@@ -122,7 +126,13 @@ export default function Music() {
             </div>
           </div>
           <div className="lyric-box pb-8 mt-8" ref={lyricBox}>
+            {lyric && lyric.isPure && (
+              <div className="tl-lyric active flex-1 items-center flex -mt-28">
+                纯音乐，请您欣赏
+              </div>
+            )}
             {lyric &&
+              !lyric.isPure &&
               lyric.musicLyric.map((ly: string, index) => (
                 <div
                   className={
@@ -135,23 +145,25 @@ export default function Music() {
               ))}
           </div>
         </div>
-        <div
-          className="w-1/2 flex flex-wrap justify-between items-center"
-          style={{ padding: "0 64px" }}
-        >
-          <div className="text-white text-xl font-serif tracking-wide">
+        <div className="w-1/2">
+          <div className="text-white text-xl font-serif tracking-wide text-center pb-12">
             与{musicInfo.name}相似的音乐
           </div>
-          {simi.map((song, index) => (
-            <Card
-              size="small"
-              hoverable
-              cover={<img alt="example" src={song.album.picUrl} />}
-              key={index}
-            >
-              <Meta title={song.name} description={handleAr(song.artists)} />
-            </Card>
-          ))}
+          <div
+            className="flex flex-wrap justify-between items-center"
+            style={{ padding: "0 84px" }}
+          >
+            {simi.map((song, index) => (
+              <Card
+                size="small"
+                hoverable
+                cover={<img alt="example" src={song.album.picUrl} />}
+                key={index}
+              >
+                <Meta title={song.name} description={handleAr(song.artists)} />
+              </Card>
+            ))}
+          </div>
         </div>
       </div>
     </div>

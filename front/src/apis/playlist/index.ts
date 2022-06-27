@@ -10,7 +10,12 @@ export const getMusicListInfo = async (ids: string) => {
   return p.data;
 };
 
-export const getPlaylistComment = async (pid: string) => {
-  const p = await $.get(`/comment/playlist?id=${pid}`);
+export const getPlaylistComment = async (pid: string, page?: number) => {
+  const p = await $.get(`/comment/playlist?id=${pid}&offset=${page * 20}`);
+  return p.data;
+};
+
+export const getPlaylistCollect = async (pid: string, page?: number) => {
+  const p = await $.get(`/playlist/subscribers?id=${pid}&offset=${page * 20}`);
   return p.data;
 };
