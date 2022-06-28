@@ -1,6 +1,6 @@
 import "./App.less";
 import logo from "./assets/img/logo.png";
-import { Layout, Menu, Input, Divider, Modal } from "antd";
+import { Layout, Menu, Input, Divider, Modal, Drawer } from "antd";
 import {
   UserOutlined,
   LeftOutlined,
@@ -36,54 +36,11 @@ import { ItemType } from "antd/lib/menu/hooks/useItems";
 import useLazy from "./hooks/useLazy";
 import { Ctx } from "./context/back";
 import useHistory from "./hooks/useHistroy";
-
+import Icons from "./components/App/Icons";
 const LazyPlayList = useLazy(import("./pages/playlist/index"));
 const LazyMusic = useLazy(import("./pages/music"));
-
+const LazyLogin = useLazy(import("./components/App/LoginDrawer"));
 const { Header, Content, Sider, Footer } = Layout;
-
-export const Icons = () => {
-  const { ipcRenderer } = window;
-  const [isMax, setIsMax] = useState(false);
-  useLayoutEffect(() => {
-    ipcRenderer.invoke("windowIsMaximized").then((res) => {
-      setIsMax(res);
-    });
-  }, []);
-  return (
-    <>
-      <div
-        style={{ backgroundColor: "rgb(255,95,87)" }}
-        className="flex text-transparent mx-2 rounded-full p-1 cursor-pointer tl-click hover:text-white transition-colors duration-200"
-        onClick={() => {
-          ipcRenderer.send("close");
-        }}
-      >
-        <CloseOutlined />
-      </div>
-      <div
-        style={{ backgroundColor: "rgb(255,198,46)" }}
-        className="flex mx-2 rounded-full p-1 cursor-pointer tl-click text-transparent hover:text-white transition-colors duration-200"
-        onClick={() => {
-          ipcRenderer.send("min");
-        }}
-      >
-        <MinusOutlined />
-      </div>
-      <div
-        style={{ backgroundColor: "rgb(40,201,64)" }}
-        className="flex text-transparent mx-2 rounded-full p-1 cursor-pointer tl-click hover:text-white transition-colors duration-200"
-        onClick={async () => {
-          const res = await ipcRenderer.invoke("windowIsMaximized");
-          setIsMax(res);
-          ipcRenderer.send("max");
-        }}
-      >
-        {isMax ? <CompressOutlined /> : <ExpandOutlined />}
-      </div>
-    </>
-  );
-};
 
 const Head = () => {
   const { shell } = window;
@@ -98,6 +55,10 @@ const Head = () => {
 
   return (
     <Header className="header flex items-center justify-between select-none ">
+      <LazyLogin
+        isModalVisible={isModalVisible}
+        setIsModalVisible={setIsModalVisible}
+      />
       <div className="flex items-center">
         <Icons />
       </div>
@@ -197,18 +158,6 @@ const Head = () => {
           <GithubOutlined />
         </a>
       </div>
-      <Modal
-        centered
-        closable
-        footer={null}
-        maskClosable
-        visible={isModalVisible}
-        onCancel={() => setIsModalVisible(false)}
-      >
-        <p>Some contents...</p>
-        <p>Some contents...</p>
-        <p>Some contents...</p>
-      </Modal>
     </Header>
   );
 };

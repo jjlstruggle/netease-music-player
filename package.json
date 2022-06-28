@@ -30,7 +30,12 @@
     "win": {
       "icon": "/ico.png",
       "target": [
-        "dir"
+        {
+          "target": "nsis",
+          "arch": [
+            "x64"
+          ]
+        }
       ]
     },
     "files": [
