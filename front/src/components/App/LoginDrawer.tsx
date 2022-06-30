@@ -2,39 +2,35 @@ import {
   UserOutlined,
   LockOutlined,
   MailFilled,
-  QrcodeOutlined,
   ArrowLeftOutlined,
   ArrowRightOutlined,
 } from "@ant-design/icons";
 import { Button, Drawer, Input } from "antd";
-import { CSSProperties, useState } from "react";
+import { CSSProperties, memo, useState } from "react";
 
-const Card = ({
-  Slot,
-  style,
-}: {
-  Slot: JSX.Element;
-  style?: CSSProperties;
-}) => {
-  return (
-    <div
-      className="shadow-xl rounded-lg px-10"
-      style={{
-        width: 400,
-        height: 500,
-        backgroundColor: "rgb(255,255,255,0.1)",
-        ...style,
-      }}
-    >
-      {Slot}
-    </div>
-  );
-};
+const Card = memo(
+  ({ Slot, style }: { Slot: JSX.Element; style?: CSSProperties }) => {
+    return (
+      <div
+        className="shadow-2xl rounded-lg px-10 absolute"
+        style={{
+          width: 400,
+          height: 500,
+          backgroundColor: "#4A4A4A",
+          ...style,
+        }}
+      >
+        {Slot}
+      </div>
+    );
+  }
+);
 
 const LoginDrawer = ({ isModalVisible, setIsModalVisible }) => {
   const [account, setAccount] = useState<string | undefined>();
   const [Password, setPassword] = useState<string | undefined>();
-  const [select, setSelect] = useState(1);
+  const [select, setSelect] = useState(0);
+
   return (
     <Drawer
       closable={false}
@@ -48,19 +44,39 @@ const LoginDrawer = ({ isModalVisible, setIsModalVisible }) => {
         padding: 0,
       }}
     >
-      <div className="w-full h-full flex items-center">
+      <div
+        className="w-full flex relative mx-auto transition-all duration-300"
+        style={{
+          transform: `rotateX(10deg) rotateY(${select * 120}deg)`,
+          transformStyle: "preserve-3d",
+          width: 400,
+          height: 500,
+          marginTop: "calc(50vh - 250px)",
+        }}
+      >
         <Card
           key={0}
           style={{
-            transform: "rotateX(30deg) rotateY(60deg) translateY(-45px)",
-            width: select == 0 ? 400 : 200,
+            transform: "rotateY(240deg)",
+            transformOrigin: "100% 50%",
+            left: -400,
           }}
           Slot={
             <>
-              <div className="flex justify-end">
+              <div className="flex justify-between">
                 <Button
                   onClick={() => {
-                    setSelect(1);
+                    setSelect(2);
+                  }}
+                  type="primary"
+                  className="tl-flex-cc mt-4"
+                  style={{ display: "flex" }}
+                >
+                  <ArrowLeftOutlined />
+                </Button>
+                <Button
+                  onClick={() => {
+                    setSelect(0);
                   }}
                   type="primary"
                   className="tl-flex-cc mt-4"
@@ -72,10 +88,11 @@ const LoginDrawer = ({ isModalVisible, setIsModalVisible }) => {
               <div className="font-serif text-lg text-center mt-12">
                 LOGIN BY EMAIL
               </div>
-              <div className="bg-white text-gray-600 rounded-full w-20 h-20 mx-auto text-6xl tl-flex-cc mt-12 mb-24">
+              <div className="bg-white text-gray-600 rounded-full w-20 h-20 mx-auto text-6xl tl-flex-cc mt-12 mb-12">
                 <MailFilled />
               </div>
               <Input
+                className="mb-6"
                 prefix={<UserOutlined />}
                 placeholder="请输入你的邮箱"
                 allowClear
@@ -94,15 +111,14 @@ const LoginDrawer = ({ isModalVisible, setIsModalVisible }) => {
         <Card
           key={1}
           style={{
-            transform: "rotateX(0) rotateY(0) translateY(0)",
-            width: select == 1 ? 400 : 200,
+            transform: "rotateY(0)",
           }}
           Slot={
             <>
               <div className="flex justify-between">
                 <Button
                   onClick={() => {
-                    setSelect(0);
+                    setSelect(1);
                   }}
                   type="primary"
                   className="tl-flex-cc mt-4"
@@ -149,20 +165,32 @@ const LoginDrawer = ({ isModalVisible, setIsModalVisible }) => {
         <Card
           key={2}
           style={{
-            transform: "rotateX(330deg) rotateY(60deg) translateY(-45px)",
-            width: select == 2 ? 400 : 200,
+            transform: "rotateY(120deg)",
+            transformOrigin: "0% 50%",
+            left: 400,
           }}
           Slot={
             <>
-              <div className="flex justify-between items-center">
+              <div className="flex justify-between">
+                <Button
+                  onClick={() => {
+                    setSelect(0);
+                  }}
+                  type="primary"
+                  className="tl-flex-cc mt-4"
+                  style={{ display: "flex" }}
+                >
+                  <ArrowLeftOutlined />
+                </Button>
                 <Button
                   onClick={() => {
                     setSelect(1);
                   }}
                   type="primary"
-                  className="mt-4"
+                  className="tl-flex-cc mt-4"
+                  style={{ display: "flex" }}
                 >
-                  <ArrowLeftOutlined />
+                  <ArrowRightOutlined />
                 </Button>
               </div>
               <div className="font-serif text-lg text-center mt-12">

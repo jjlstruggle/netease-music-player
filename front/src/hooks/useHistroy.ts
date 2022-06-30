@@ -1,5 +1,5 @@
-import { useCallback, useRef } from "react";
-import { useLocation, useNavigate, useNavigationType } from "react-router-dom";
+import { useRef } from "react";
+import { useLocation, useNavigationType } from "react-router-dom";
 export default function useHistory() {
   const $location = useLocation();
   const type = useNavigationType();

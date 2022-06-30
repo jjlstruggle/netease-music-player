@@ -4,7 +4,9 @@
   "description": "> 基于 create-react-app antd axios electron搭建,使用了 `typescript`",
   "main": "./front/main.js",
   "scripts": {
-    "pack:win": "npx cross-env NODE_ENV=production electron-builder -w --x64 "
+    "pack:win": "npx cross-env NODE_ENV=production electron-builder -w --x64 ",
+    "start": "cd ./front && yarn start && yarn ele",
+    "ele": "cd ./front && npx cross-env NODE_ENV=development nodemon --watch ./main.js --exec \"electron .\""
   },
   "repository": {
     "type": "git",

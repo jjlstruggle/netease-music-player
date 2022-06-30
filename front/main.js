@@ -1,5 +1,4 @@
 const { BrowserWindow, app, ipcMain } = require("electron");
-const path = require("path");
 const isDev = process.env.NODE_ENV === "development"
 
 function createWindow() {
@@ -13,7 +12,7 @@ function createWindow() {
             nodeIntegration: true,
             nodeIntegrationInWorker: true,
             contextIsolation: false,
-            preload: path.join(__dirname, 'preload.js')
+            preload: __dirname + '\\preload.js'
         },
         frame: false,
     });
@@ -21,7 +20,7 @@ function createWindow() {
     if (isDev) {
         window.loadURL("http://localhost:3000");
     } else {
-        window.loadFile(path.join(__dirname, './build/index.html'))
+        window.loadFile('file://' + __dirname + './build/index.html')
     }
 
     window.on("closed", function () {
