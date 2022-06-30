@@ -1,4 +1,4 @@
-const { ipcRenderer, shell } = require('electron')
+const { ipcRenderer, shell, session } = require('electron')
 
 window.addEventListener('DOMContentLoaded', () => {
     const replaceText = (selector, text) => {
@@ -13,3 +13,4 @@ window.addEventListener('DOMContentLoaded', () => {
 
 window.ipcRenderer = ipcRenderer
 window.shell = shell
+window.session = session

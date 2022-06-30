@@ -1,6 +1,5 @@
 import "./App.less";
-import logo from "./assets/img/logo.png";
-import { Layout, Menu, Input, Divider, Modal, Drawer } from "antd";
+import { Layout, Menu, Input, Divider } from "antd";
 import {
   UserOutlined,
   LeftOutlined,
@@ -10,25 +9,14 @@ import {
   SkinOutlined,
   BoldOutlined,
   MailOutlined,
-  CaretDownOutlined,
   PlusOutlined,
   LoginOutlined,
   HistoryOutlined,
   CloudOutlined,
   HeartOutlined,
-  MinusOutlined,
-  CloseOutlined,
-  ExpandOutlined,
-  CompressOutlined,
 } from "@ant-design/icons";
-import { lazy, useContext, useLayoutEffect, useMemo, useState } from "react";
-import {
-  Route,
-  Routes,
-  Navigate,
-  useNavigate,
-  useLocation,
-} from "react-router-dom";
+import { useContext, useMemo, useState } from "react";
+import { Route, Routes, Navigate, useNavigate } from "react-router-dom";
 import Discover from "./pages/discover";
 import { PodcastIcon, MyCollectIcon, YinFuIcon } from "./assets/svg";
 import Player from "./components/player";
@@ -63,13 +51,6 @@ const Head = () => {
         <Icons />
       </div>
       <div className="flex items-center">
-        <div className="logo flex items-center">
-          <img
-            className="rounded-full w-10 h-10 mr-4"
-            src={logo}
-            alt="图片加载失败"
-          />
-        </div>
         <div className="text-xl flex items-center ml-5 tl-click">
           <span
             className={
@@ -113,20 +94,13 @@ const Head = () => {
             <UserOutlined />
           )}
         </div>
-        <div className="name cursor-pointer text-sm flex mx-4 tl-click">
-          <span>{userInfo.name || "未登录"}</span>
-          <CaretDownOutlined />
-          <span className="lg-none">
-            {userInfo.vipStatus === 0 ? "开通vip" : "vip"}
-          </span>
-        </div>
-        <div className="flex mx-4 lg-none tl-click">
+        <div className="flex mx-8 lg-none tl-click">
           <SkinOutlined />
         </div>
-        <div className="flex mx-4 lg-none tl-click">
+        <div className="flex mx-8 lg-none tl-click">
           <MailOutlined />
         </div>
-        <div className="flex mx-4 lg-none tl-click">
+        <div className="flex mx-8 lg-none tl-click">
           <SettingOutlined />
         </div>
         <Divider

@@ -1,9 +1,4 @@
-import {
-  createAction,
-  createReducer,
-  PayloadAction,
-  createSlice,
-} from "@reduxjs/toolkit";
+import { PayloadAction, createSlice } from "@reduxjs/toolkit";
 import { PlayerState } from "../../interface";
 
 type PlayList = [];
@@ -29,5 +24,8 @@ const playlistSlice = createSlice({
     },
   },
 });
+
+export const { updateCurrentPlayListInfo, updatePlayList } =
+  playlistSlice.actions;
 
 export default playlistSlice.reducer;

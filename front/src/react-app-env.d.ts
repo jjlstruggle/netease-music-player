@@ -74,4 +74,5 @@ declare interface Window {
   $audio: HTMLAudioElement;
   ipcRenderer: Electron.IpcRenderer;
   shell: Electron.Shell;
+  session: Electron.Session;
 }

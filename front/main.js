@@ -7,7 +7,7 @@ function createWindow() {
         width: 1580,
         height: 740,
         minWidth: 1024,
-        minHeight: 640,
+        minHeight: 660,
         webPreferences: {
             nodeIntegration: true,
             nodeIntegrationInWorker: true,
@@ -19,6 +19,7 @@ function createWindow() {
 
     if (isDev) {
         window.loadURL("http://localhost:3000");
+        window.webContents.openDevTools();
     } else {
         window.loadFile('file://' + __dirname + './build/index.html')
     }
@@ -27,7 +28,6 @@ function createWindow() {
         window = null;
     });
 
-    window.webContents.openDevTools();
     return window
 }
 

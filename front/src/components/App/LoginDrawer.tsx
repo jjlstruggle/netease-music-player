@@ -5,9 +5,9 @@ import {
   ArrowLeftOutlined,
   ArrowRightOutlined,
 } from "@ant-design/icons";
-import { Button, Drawer, Input } from "antd";
+import { Button, Drawer, Input, Checkbox } from "antd";
 import { CSSProperties, memo, useState } from "react";
-
+import eleSession from "../../utils/eleSession";
 const Card = memo(
   ({ Slot, style }: { Slot: JSX.Element; style?: CSSProperties }) => {
     return (
@@ -31,6 +31,8 @@ const LoginDrawer = ({ isModalVisible, setIsModalVisible }) => {
   const [Password, setPassword] = useState<string | undefined>();
   const [select, setSelect] = useState(0);
 
+  const login = async () => {};
+
   return (
     <Drawer
       closable={false}
@@ -45,160 +47,220 @@ const LoginDrawer = ({ isModalVisible, setIsModalVisible }) => {
       }}
     >
       <div
-        className="w-full flex relative mx-auto transition-all duration-300"
+        className="transition-all duration-150"
         style={{
-          transform: `rotateX(10deg) rotateY(${select * 120}deg)`,
-          transformStyle: "preserve-3d",
-          width: 400,
-          height: 500,
-          marginTop: "calc(50vh - 250px)",
+          transform: `translateX(${
+            select == 0 ? 0 : select == 1 ? 100 : select == 2 ? 0 : -100
+          }px)`,
         }}
       >
-        <Card
-          key={0}
+        <div
+          className="flex relative mx-auto transition-all duration-300"
           style={{
-            transform: "rotateY(240deg)",
-            transformOrigin: "100% 50%",
-            left: -400,
+            transform: `
+          rotateX(10deg)
+          rotateY(${
+            select == 0 ? 0 : select == 1 ? 90 : select == 2 ? 180 : -90
+          }deg)
+          rotateZ(0deg)
+          `,
+            transformStyle: "preserve-3d",
+            width: 400,
+            height: 500,
+            marginTop: "calc(50vh - 300px)",
           }}
-          Slot={
-            <>
-              <div className="flex justify-between">
-                <Button
-                  onClick={() => {
-                    setSelect(2);
-                  }}
-                  type="primary"
-                  className="tl-flex-cc mt-4"
-                  style={{ display: "flex" }}
-                >
-                  <ArrowLeftOutlined />
-                </Button>
-                <Button
-                  onClick={() => {
-                    setSelect(0);
-                  }}
-                  type="primary"
-                  className="tl-flex-cc mt-4"
-                  style={{ display: "flex" }}
-                >
-                  <ArrowRightOutlined />
-                </Button>
-              </div>
-              <div className="font-serif text-lg text-center mt-12">
-                LOGIN BY EMAIL
-              </div>
-              <div className="bg-white text-gray-600 rounded-full w-20 h-20 mx-auto text-6xl tl-flex-cc mt-12 mb-12">
-                <MailFilled />
-              </div>
-              <Input
-                className="mb-6"
-                prefix={<UserOutlined />}
-                placeholder="请输入你的邮箱"
-                allowClear
-                value={account}
-                onChange={(event) => setAccount(event.target.value)}
-              />
-              <Input.Password
-                prefix={<LockOutlined />}
-                placeholder="请输入你的密码"
-                value={Password}
-                onChange={(event) => setPassword(event.target.value)}
-              />
-            </>
-          }
-        />
-        <Card
-          key={1}
-          style={{
-            transform: "rotateY(0)",
-          }}
-          Slot={
-            <>
-              <div className="flex justify-between">
-                <Button
-                  onClick={() => {
-                    setSelect(1);
-                  }}
-                  type="primary"
-                  className="tl-flex-cc mt-4"
-                  style={{ display: "flex" }}
-                >
-                  <ArrowLeftOutlined />
-                </Button>
-                <Button
-                  onClick={() => {
-                    setSelect(2);
-                  }}
-                  type="primary"
-                  className="tl-flex-cc mt-4"
-                  style={{ display: "flex" }}
-                >
-                  <ArrowRightOutlined />
-                </Button>
-              </div>
-              <div className="font-serif text-lg text-center mt-12">
-                LOGIN BY PHONE
-              </div>
-              <div className="bg-white text-gray-600 rounded-full w-20 h-20 mx-auto text-6xl flex items-end justify-center mt-6 mb-12">
-                <UserOutlined />
-              </div>
-              <Input
-                className="mb-6"
-                size="large"
-                prefix={<UserOutlined />}
-                placeholder="请输入你的手机号"
-                allowClear
-                value={account}
-                onChange={(event) => setAccount(event.target.value)}
-              />
-              <Input.Password
-                size="large"
-                prefix={<LockOutlined />}
-                placeholder="请输入你的密码"
-                value={Password}
-                onChange={(event) => setPassword(event.target.value)}
-              />
-            </>
-          }
-        />
-        <Card
-          key={2}
-          style={{
-            transform: "rotateY(120deg)",
-            transformOrigin: "0% 50%",
-            left: 400,
-          }}
-          Slot={
-            <>
-              <div className="flex justify-between">
-                <Button
-                  onClick={() => {
-                    setSelect(0);
-                  }}
-                  type="primary"
-                  className="tl-flex-cc mt-4"
-                  style={{ display: "flex" }}
-                >
-                  <ArrowLeftOutlined />
-                </Button>
-                <Button
-                  onClick={() => {
-                    setSelect(1);
-                  }}
-                  type="primary"
-                  className="tl-flex-cc mt-4"
-                  style={{ display: "flex" }}
-                >
-                  <ArrowRightOutlined />
-                </Button>
-              </div>
-              <div className="font-serif text-lg text-center mt-12">
-                LOGIN BY QRCODE
-              </div>
-            </>
-          }
-        />
+        >
+          <Card
+            key={1}
+            style={{
+              transform: "rotateY(-90deg)",
+              transformOrigin: "100% 50%",
+              left: -400,
+            }}
+            Slot={
+              <>
+                <div className="flex justify-between">
+                  <Button
+                    onClick={() => {
+                      setSelect(2);
+                    }}
+                    type="primary"
+                    className="tl-flex-cc mt-4"
+                    style={{ display: "flex" }}
+                  >
+                    <ArrowLeftOutlined />
+                  </Button>
+                  <Button
+                    onClick={() => {
+                      setSelect(0);
+                    }}
+                    type="primary"
+                    className="tl-flex-cc mt-4"
+                    style={{ display: "flex" }}
+                  >
+                    <ArrowRightOutlined />
+                  </Button>
+                </div>
+                <div className="font-serif text-lg text-center mt-12">
+                  LOGIN BY EMAIL
+                </div>
+                <div className="bg-white text-gray-600 rounded-full w-20 h-20 mx-auto text-6xl tl-flex-cc mt-12 mb-12">
+                  <MailFilled />
+                </div>
+                <Input
+                  className="mb-6"
+                  prefix={<UserOutlined />}
+                  placeholder="请输入你的邮箱"
+                  allowClear
+                  value={account}
+                  onChange={(event) => setAccount(event.target.value)}
+                />
+                <Input.Password
+                  prefix={<LockOutlined />}
+                  placeholder="请输入你的密码"
+                  value={Password}
+                  onChange={(event) => setPassword(event.target.value)}
+                />
+                <div className="flex items-center justify-between mt-4">
+                  <Checkbox>记住我</Checkbox>
+                  <Button type="primary">提交</Button>
+                </div>
+              </>
+            }
+          />
+          <Card
+            key={0}
+            style={{
+              transform: "rotateY(0)",
+            }}
+            Slot={
+              <>
+                <div className="flex justify-between">
+                  <Button
+                    onClick={() => {
+                      setSelect(1);
+                    }}
+                    type="primary"
+                    className="tl-flex-cc mt-4"
+                    style={{ display: "flex" }}
+                  >
+                    <ArrowLeftOutlined />
+                  </Button>
+                  <Button
+                    onClick={() => {
+                      setSelect(3);
+                    }}
+                    type="primary"
+                    className="tl-flex-cc mt-4"
+                    style={{ display: "flex" }}
+                  >
+                    <ArrowRightOutlined />
+                  </Button>
+                </div>
+                <div className="font-serif text-lg text-center mt-12">
+                  LOGIN BY PHONE
+                </div>
+                <div className="bg-white text-gray-600 rounded-full w-20 h-20 mx-auto text-6xl flex items-end justify-center mt-6 mb-12">
+                  <UserOutlined />
+                </div>
+                <Input
+                  className="mb-6"
+                  size="large"
+                  prefix={<UserOutlined />}
+                  placeholder="请输入你的手机号"
+                  allowClear
+                  value={account}
+                  onChange={(event) => setAccount(event.target.value)}
+                />
+                <Input.Password
+                  size="large"
+                  prefix={<LockOutlined />}
+                  placeholder="请输入你的密码"
+                  value={Password}
+                  onChange={(event) => setPassword(event.target.value)}
+                />
+                <div className="flex items-center justify-between mt-4">
+                  <Checkbox>记住我</Checkbox>
+                  <Button type="primary">提交</Button>
+                </div>
+              </>
+            }
+          />
+          <Card
+            key={3}
+            style={{
+              transform: "rotateY(90deg)",
+              transformOrigin: "0% 50%",
+              left: 400,
+            }}
+            Slot={
+              <>
+                <div className="flex justify-between">
+                  <Button
+                    onClick={() => {
+                      setSelect(0);
+                    }}
+                    type="primary"
+                    className="tl-flex-cc mt-4"
+                    style={{ display: "flex" }}
+                  >
+                    <ArrowLeftOutlined />
+                  </Button>
+                  <Button
+                    onClick={() => {
+                      setSelect(2);
+                    }}
+                    type="primary"
+                    className="tl-flex-cc mt-4"
+                    style={{ display: "flex" }}
+                  >
+                    <ArrowRightOutlined />
+                  </Button>
+                </div>
+                <div className="font-serif text-lg text-center mt-12">
+                  LOGIN BY CODE
+                </div>
+              </>
+            }
+          />
+          <Card
+            key={2}
+            style={{
+              transform:
+                "rotateY(0deg) translateX(400px) translateZ(-400px) rotateY(180deg)",
+              transformOrigin: "0% 50%",
+            }}
+            Slot={
+              <>
+                <div className="flex justify-between">
+                  <Button
+                    onClick={() => {
+                      setSelect(1);
+                    }}
+                    type="primary"
+                    className="tl-flex-cc mt-4"
+                    style={{ display: "flex" }}
+                  >
+                    <ArrowLeftOutlined />
+                  </Button>
+                  <Button
+                    onClick={() => {
+                      setSelect(3);
+                    }}
+                    type="primary"
+                    className="tl-flex-cc mt-4"
+                    style={{ display: "flex" }}
+                  >
+                    <ArrowRightOutlined />
+                  </Button>
+                </div>
+                <div className="font-serif text-lg text-center mt-12">
+                  LOGIN BY QRCODE
+                </div>
+              </>
+            }
+          />
+        </div>
       </div>
     </Drawer>
   );
