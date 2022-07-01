@@ -17,11 +17,7 @@ const loginAsPhone = async (
         captcha,
         timeStamp: stamp,
       };
-  const res = await $.post("/login/cellphone", data, {
-    headers: {
-      "Content-Type": "application/x-www-form-urlencoded",
-    },
-  });
+  const res = await $.post("/login/cellphone", data);
   return res.data;
 };
 

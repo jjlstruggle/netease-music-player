@@ -1,6 +1,9 @@
 const { BrowserWindow, app, ipcMain } = require("electron");
 const isDev = process.env.NODE_ENV === "development"
-
+const Store = require("electron-store");
+const store = new Store({
+    cwd: "cache",
+});
 function createWindow() {
     // 创建一个浏览器窗口.
     let window = new BrowserWindow({
@@ -10,7 +13,7 @@ function createWindow() {
         minHeight: 660,
         webPreferences: {
             nodeIntegration: true,
-            nodeIntegrationInWorker: true,
+            nodeIntegrationInWorker: false,
             contextIsolation: false,
             preload: __dirname + '\\preload.js'
         },
@@ -46,6 +49,15 @@ app.whenReady().then(() => {
     ipcMain.on("min", function () {
         window.minimize();
     });
+
+    ipcMain.on('setStore', function (key, data) {
+        store.set(key, data)
+    })
+
+    ipcMain.handle('getStore', async (key) => {
+        const res = store.get(key)
+        return res
+    })
 
     ipcMain.handle('windowIsMaximized', async () => {
         const res = window.isMaximized()

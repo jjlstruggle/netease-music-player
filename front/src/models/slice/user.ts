@@ -1,9 +1,10 @@
+import { UserInfo } from "./../../interface/type";
 import { PayloadAction, createSlice } from "@reduxjs/toolkit";
 
 interface UserInfoPayload {}
 
 interface UserState {
-  userInfo: object;
+  userInfo: UserInfo | {};
   loginState: boolean;
 }
 

@@ -1,7 +1,11 @@
-import Store from "electron-store";
+const { ipcRenderer } = window;
 
-const store = new Store({
-  cwd: "cache",
-});
-
-export default store;
+export default {
+  async get(key: string) {
+    const res = await ipcRenderer.invoke("getStore", key);
+    return res;
+  },
+  async set<T>(key: string, value: T) {
+    ipcRenderer.send("setStore", key, value);
+  },
+};

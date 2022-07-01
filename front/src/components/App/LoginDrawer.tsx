@@ -7,7 +7,18 @@ import {
 } from "@ant-design/icons";
 import { Button, Drawer, Input, Checkbox } from "antd";
 import { CSSProperties, memo, useState } from "react";
-import eleSession from "../../utils/eleSession";
+import { useDispatch } from "react-redux";
+import {
+  loginAsEmail,
+  loginAsPhone,
+  checkCode,
+  checkQrCode,
+  sendCode,
+  getQrCode,
+  getQrCodeImg,
+} from "../../apis/login";
+import { updateUserInfo, updateLoginState } from "../../models/slice/user";
+import storage from "../../utils/storage";
 const Card = memo(
   ({ Slot, style }: { Slot: JSX.Element; style?: CSSProperties }) => {
     return (
@@ -27,11 +38,32 @@ const Card = memo(
 );
 
 const LoginDrawer = ({ isModalVisible, setIsModalVisible }) => {
-  const [account, setAccount] = useState<string | undefined>();
-  const [Password, setPassword] = useState<string | undefined>();
+  const [$account, setAccount] = useState<string | undefined>();
+  const [password, setPassword] = useState<string | undefined>();
   const [select, setSelect] = useState(0);
-
-  const login = async () => {};
+  const dispatch = useDispatch();
+  const login = async () => {
+    if (select == 0) {
+      const res = await loginAsPhone($account, password);
+      const { cookie, account, profile } = res;
+      const userInfo = {
+        userName: account.userName,
+        createTime: account.createTime,
+        vipType: profile.vipType,
+        userId: profile.userId,
+        nickname: profile.nickname,
+        follows: profile.follows,
+        followeds: profile.followeds,
+        city: profile.city,
+        birthday: profile.birthday,
+        avatar: profile.avatarUrl,
+      };
+      storage.set("cookie", cookie);
+      storage.set("userInfo", userInfo);
+      dispatch(updateLoginState(true));
+      dispatch(updateUserInfo(userInfo));
+    }
+  };
 
   return (
     <Drawer
@@ -112,13 +144,13 @@ const LoginDrawer = ({ isModalVisible, setIsModalVisible }) => {
                   prefix={<UserOutlined />}
                   placeholder="请输入你的邮箱"
                   allowClear
-                  value={account}
+                  value={$account}
                   onChange={(event) => setAccount(event.target.value)}
                 />
                 <Input.Password
                   prefix={<LockOutlined />}
                   placeholder="请输入你的密码"
-                  value={Password}
+                  value={password}
                   onChange={(event) => setPassword(event.target.value)}
                 />
                 <div className="flex items-center justify-between mt-4">
@@ -169,19 +201,21 @@ const LoginDrawer = ({ isModalVisible, setIsModalVisible }) => {
                   prefix={<UserOutlined />}
                   placeholder="请输入你的手机号"
                   allowClear
-                  value={account}
+                  value={$account}
                   onChange={(event) => setAccount(event.target.value)}
                 />
                 <Input.Password
                   size="large"
                   prefix={<LockOutlined />}
                   placeholder="请输入你的密码"
-                  value={Password}
+                  value={password}
                   onChange={(event) => setPassword(event.target.value)}
                 />
                 <div className="flex items-center justify-between mt-4">
                   <Checkbox>记住我</Checkbox>
-                  <Button type="primary">提交</Button>
+                  <Button type="primary" onClick={login}>
+                    提交
+                  </Button>
                 </div>
               </>
             }

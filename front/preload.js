@@ -1,5 +1,6 @@
 const { ipcRenderer, shell, session } = require('electron')
 
+
 window.addEventListener('DOMContentLoaded', () => {
     const replaceText = (selector, text) => {
         const element = document.getElementById(selector)
