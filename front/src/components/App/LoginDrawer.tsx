@@ -6,8 +6,8 @@ import {
   ArrowRightOutlined,
 } from "@ant-design/icons";
 import { Button, Drawer, Input, Checkbox } from "antd";
-import { CSSProperties, memo, useState } from "react";
-import { useDispatch } from "react-redux";
+import { CSSProperties, memo, useRef, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import {
   loginAsEmail,
   loginAsPhone,
@@ -19,6 +19,8 @@ import {
 } from "../../apis/login";
 import { updateUserInfo, updateLoginState } from "../../models/slice/user";
 import storage from "../../utils/storage";
+import useAsyncEffest from "../../hooks/useAsyncEffect";
+import { ReduxState, UserInfo } from "src/interface/type";
 const Card = memo(
   ({ Slot, style }: { Slot: JSX.Element; style?: CSSProperties }) => {
     return (
@@ -58,8 +60,8 @@ const LoginDrawer = ({ isModalVisible, setIsModalVisible }) => {
         birthday: profile.birthday,
         avatar: profile.avatarUrl,
       };
-      storage.set("cookie", cookie);
-      storage.set("userInfo", userInfo);
+      storage.set<string>("cookie", cookie);
+      storage.set<UserInfo>("userInfo", userInfo);
       dispatch(updateLoginState(true));
       dispatch(updateUserInfo(userInfo));
     }
@@ -71,7 +73,9 @@ const LoginDrawer = ({ isModalVisible, setIsModalVisible }) => {
       footer={null}
       maskClosable
       visible={isModalVisible}
-      onClose={() => setIsModalVisible(false)}
+      onClose={() => {
+        setIsModalVisible(false);
+      }}
       placement="left"
       size="large"
       bodyStyle={{
@@ -300,4 +304,6 @@ const LoginDrawer = ({ isModalVisible, setIsModalVisible }) => {
   );
 };
 
-export default LoginDrawer;
+export default memo(LoginDrawer, function (prev, next) {
+  return prev.isModalVisible == next.isModalVisible;
+});

@@ -7,6 +7,7 @@ export interface ReduxState {
     musicMode: string;
     songsList: MusicInfo[];
   };
+  user: { loginState: boolean; userInfo: UserInfo };
 }
 
 export interface UserInfo {

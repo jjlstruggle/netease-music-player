@@ -2,7 +2,7 @@ const { BrowserWindow, app, ipcMain } = require("electron");
 const isDev = process.env.NODE_ENV === "development"
 const Store = require("electron-store");
 const store = new Store({
-    cwd: "cache",
+    cwd: "app-cache",
 });
 function createWindow() {
     // 创建一个浏览器窗口.
@@ -50,11 +50,11 @@ app.whenReady().then(() => {
         window.minimize();
     });
 
-    ipcMain.on('setStore', function (key, data) {
+    ipcMain.on('setStore', function (event, key, data) {
         store.set(key, data)
     })
 
-    ipcMain.handle('getStore', async (key) => {
+    ipcMain.handle('getStore', async (event, key) => {
         const res = store.get(key)
         return res
     })

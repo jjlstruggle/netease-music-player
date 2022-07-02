@@ -1,9 +1,4 @@
-import { IpcRenderer } from "electron";
 import { MusicInfo } from "src/models/slice/musicInfo";
-
-declare interface Window {
-  ipcRenderer: IpcRenderer;
-}
 
 export interface PlaylistInfo {
   id: string;
@@ -50,18 +45,9 @@ export interface PlaylistActions {
   updateSongs?: (songs: MusicInfo[]) => void;
 }
 
-export interface ReduxState {
-  playlist: PlaylistState;
-  player: PlayerState;
-}
-
 export interface Ar {
   id: string;
   name: string;
-}
-
-interface Quality {
-  br: number;
 }
 
 export interface Comment {
