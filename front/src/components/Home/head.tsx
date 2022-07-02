@@ -31,6 +31,7 @@ const User = ({ setIsModalVisible }) => {
       setUserInfo({ name: user.nickname, avatar: user.avatar });
     }
   }, []);
+  console.log(user);
 
   return (
     <div

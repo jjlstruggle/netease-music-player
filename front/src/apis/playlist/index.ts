@@ -1,4 +1,4 @@
-import $ from "axios";
+import $ from "../index";
 
 export const getPlaylistDetail = async (pid: string) => {
   const p = await $.get(`/playlist/detail?id=${pid}`);

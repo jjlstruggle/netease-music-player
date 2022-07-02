@@ -1,7 +1,8 @@
-import $ from "axios";
+import $ from "../index";
 
 export const getBanner = async () => {
   const p = await $.get("/banner");
+
   return p.data;
 };
 

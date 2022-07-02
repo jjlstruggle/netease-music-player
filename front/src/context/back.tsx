@@ -9,7 +9,7 @@ const initalState: {
 };
 
 const Ctx = createContext(initalState);
-
+Ctx.displayName = "backgroundContext";
 export default function Provider({ children }: { children: JSX.Element }) {
   const [store, setStore] = useState(img);
 

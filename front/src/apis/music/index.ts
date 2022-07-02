@@ -1,4 +1,4 @@
-import $ from "axios";
+import $ from "../index";
 
 export const getMusicUrl = async (id: string, br?: number) => {
   let p;

@@ -1,4 +1,4 @@
-import $ from "axios";
+import $ from "../index";
 
 const loginAsPhone = async (
   phone: string,

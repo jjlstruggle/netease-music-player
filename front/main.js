@@ -1,4 +1,4 @@
-const { BrowserWindow, app, ipcMain } = require("electron");
+const { BrowserWindow, app, ipcMain, net } = require("electron");
 const isDev = process.env.NODE_ENV === "development"
 const Store = require("electron-store");
 const store = new Store({
