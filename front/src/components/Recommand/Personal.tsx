@@ -1,17 +1,27 @@
 import { Fragment } from "react";
 import { getPersonalized } from "../../apis/discover";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { RightOutlined, CaretRightOutlined } from "@ant-design/icons";
 import { Row, Col } from "antd";
 import { Link } from "react-router-dom";
 import { Personalize } from "../../interface";
+import useAsyncEffect from "src/hooks/useAsyncEffect";
+import hasNet from "src/utils/net";
+
 const PersonalizeC = () => {
   const [personalized, setpersonalized] = useState(new Array(3));
-  useEffect(() => {
-    getPersonalized().then((res) => {
-      setpersonalized(res.result);
-    });
-  }, []);
+  useAsyncEffect(async () => {
+    const cacheFunction = await getPersonalized();
+    const cacheRes = await cacheFunction.getDataFromStorage();
+    if (cacheRes) {
+      setpersonalized(cacheRes.result);
+    }
+    if (hasNet()) {
+      const apiRes = await cacheFunction.getDataFromApi();
+      setpersonalized(apiRes.result);
+    }
+  });
+
   return (
     <Fragment>
       <div className="title">

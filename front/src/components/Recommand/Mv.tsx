@@ -1,18 +1,27 @@
 import { getMv } from "../../apis/discover";
-import { Fragment, useEffect, useState } from "react";
+import { Fragment, useState } from "react";
 import { RightOutlined } from "@ant-design/icons";
 import { Row, Col } from "antd";
 import { Mv } from "../../interface";
 import { Link } from "react-router-dom";
 import { SanJiaoIcon } from "../../assets/svg";
 import { handleCount } from "../../utils";
+import useAsyncEffect from "src/hooks/useAsyncEffect";
+import hasNet from "src/utils/net";
 const MvC = () => {
   const [mv, setMv] = useState(new Array(4));
-  useEffect(() => {
-    getMv().then((res) => {
-      setMv(res.result);
-    });
-  }, []);
+  useAsyncEffect(async () => {
+    const cacheFunction = await getMv();
+    const cacheRes = await cacheFunction.getDataFromStorage();
+    if (cacheRes) {
+      setMv(cacheRes.result);
+    }
+    if (hasNet()) {
+      const apiRes = await cacheFunction.getDataFromApi();
+      setMv(apiRes.result);
+    }
+  });
+
   return (
     <Fragment>
       <div className="title">

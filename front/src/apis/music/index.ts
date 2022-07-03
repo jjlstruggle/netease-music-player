@@ -7,13 +7,13 @@ export const getMusicUrl = async (id: string, br?: number) => {
   } else {
     p = await $.get(`/song/download/url?id=${id}`);
   }
-  if (!p.data.data.url) {
+  if (!p.data.url) {
     p = await $.get(`/song/url?id=${id}`);
     return {
-      data: p.data.data[0],
+      data: p.data[0],
     };
   }
-  return p.data;
+  return p;
 };
 
 export const checkMusic = async (id: number, br?: number) => {
@@ -23,15 +23,15 @@ export const checkMusic = async (id: number, br?: number) => {
   } else {
     p = await $.get(`/check/music?id=${id}`);
   }
-  return p.data;
+  return p;
 };
 
 export const getMusicLyric = async (id: string) => {
   const p = await $.get(`/lyric?id=${id}`);
-  return p.data;
+  return p;
 };
 
 export const getSimilarMuisc = async (id: string) => {
   const p = await $.get(`/simi/song?id=${id}`);
-  return p.data;
+  return p;
 };

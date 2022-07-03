@@ -6,14 +6,23 @@ import { Row, Col } from "antd";
 import { PlaylistInfo } from "../../interface";
 import { Link } from "react-router-dom";
 import Image from "../../common/Image";
+import useAsyncEffect from "src/hooks/useAsyncEffect";
+import hasNet from "src/utils/net";
 
 const Charactar = () => {
   const [recommand, setRecommand] = useState(new Array(10));
-  useEffect(() => {
-    getRecommandPlaylist().then((res) => {
-      setRecommand(res.result);
-    });
-  }, []);
+  useAsyncEffect(async () => {
+    const cacheFunction = await getRecommandPlaylist();
+    const cacheRes = await cacheFunction.getDataFromStorage();
+    if (cacheRes) {
+      setRecommand(cacheRes.result);
+    }
+    if (hasNet()) {
+      const apiRes = await cacheFunction.getDataFromApi();
+      setRecommand(apiRes.result);
+    }
+  });
+
   return (
     <Fragment>
       <div className="title">

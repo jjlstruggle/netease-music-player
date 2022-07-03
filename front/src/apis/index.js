@@ -10,31 +10,26 @@ axios.defaults.timeout = 5000;
 axios.defaults.withCredentials = true
 
 class Request {
-    async get(...args) {
-        if (!hasNet()) {
-            return {
-                code: 201,
-                data: await storage.get(args[0]),
-                onlineState: false
-            }
-        } else {
-            const res = await axios.get(...args)
-            storage.set(args[0], res.data)
-            return res
-        }
+    async getDataFromApi(...args) {
+        const res = await axios.get(...args)
+        storage.set(args[0], res.data)
+        return res.data
+    }
+    async getDataFromStorage(url) {
+        return await storage.get(url)
     }
     async post(...args) {
-        if (!hasNet()) {
-            return {
-                code: 201,
-                data: await storage.get(args[0]),
-                onlineState: false
-            }
-        } else {
-            const res = await axios.post(...args)
-            storage.set(args[0], res.data)
-            return res
+        return await axios.post(...args)
+    }
+    async get(...args) {
+        let that = this
+        return {
+            getDataFromStorage: () => that.getDataFromStorage(...args),
+            getDataFromApi: () => that.getDataFromApi(...args)
         }
+    }
+    async defaultGet(...args) {
+        return await this.getDataFromApi(...args)
     }
 }
 

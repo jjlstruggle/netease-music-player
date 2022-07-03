@@ -40,32 +40,36 @@ const loginAsEmail = async (email: string, password: string) => {
 };
 
 const getQrCode = async () => {
-  const key = await $.get("/login/qr/key");
+  const key = await $.defaultGet("/login/qr/key");
   return key.data;
 };
 
 const getQrCodeImg = async (key: string) => {
-  const img = await $.get(`/login/qr/create?key=${key}&qrimg=${Date.now()}`);
+  const img = await $.defaultGet(
+    `/login/qr/create?key=${key}&qrimg=${Date.now()}`
+  );
   return img.data;
 };
 
 const checkQrCode = async (key: string) => {
-  const res = await $.get(`login/qr/check?key=${key}`);
+  const res = await $.defaultGet(`login/qr/check?key=${key}`);
   return res.data;
 };
 
 const refreshLogin = async () => {
-  const res = await $.get("/login/refresh");
+  const res = await $.defaultGet("/login/refresh");
   return res.data;
 };
 
 const sendCode = async (phone: string) => {
-  const res = await $.get(`/captcha/sent?phone=${phone}`);
+  const res = await $.defaultGet(`/captcha/sent?phone=${phone}`);
   return res.data;
 };
 
 const checkCode = async (phone: string, captcha: string) => {
-  const res = await $.get(`/captcha/sent?phone=${phone}&captcha=${captcha}`);
+  const res = await $.defaultGet(
+    `/captcha/sent?phone=${phone}&captcha=${captcha}`
+  );
   return res.data;
 };
 
@@ -75,7 +79,7 @@ const logout = async () => {
 };
 
 const getLoginState = async () => {
-  const res = await $.get("/login/status");
+  const res = await $.defaultGet("/login/status");
   return res.data;
 };
 

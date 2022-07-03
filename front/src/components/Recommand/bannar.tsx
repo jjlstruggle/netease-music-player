@@ -1,15 +1,24 @@
 import { getBanner } from "../../apis/discover";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { Carousel } from "antd";
 import LazyImage from "../../common/LazyImage";
+import useAsyncEffect from "src/hooks/useAsyncEffect";
+import hasNet from "src/utils/net";
 
 const Banner = () => {
   const [banner, setBanner] = useState([]);
-  useEffect(() => {
-    getBanner().then((res) => {
-      setBanner(res.banners);
-    });
-  }, []);
+  useAsyncEffect(async () => {
+    const cacheFunction = await getBanner();
+    const cacheRes = await cacheFunction.getDataFromStorage();
+    if (cacheRes) {
+      setBanner(cacheRes.banners);
+    }
+    if (hasNet()) {
+      const apiRes = await cacheFunction.getDataFromApi();
+      setBanner(apiRes.banners);
+    }
+  });
+
   return (
     <Carousel
       className="pt-5 tl-slick-box"
