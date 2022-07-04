@@ -10,6 +10,8 @@ import "./apis";
 import ImgProvider, { Ctx } from "./context/back";
 import OnlineCtx from "./context/online";
 import { useContext } from "react";
+import storage from "./utils/storage";
+import cache from "./utils/cache";
 window["$audio"] = new Audio(test);
 
 const Image = () => {
@@ -17,18 +19,23 @@ const Image = () => {
   return <img src={imgCtx.imgUrl} className="absolute w-full h-full" />;
 };
 
-const root = ReactDOM.createRoot(document.getElementById("root"));
-root.render(
-  <Provider store={store}>
-    <OnlineCtx>
-      <ImgProvider>
-        <HashRouter>
-          <div className="flex w-full h-full">
-            <Image />
-            <App />
-          </div>
-        </HashRouter>
-      </ImgProvider>
-    </OnlineCtx>
-  </Provider>
-);
+(async () => {
+  const res = await storage.getAll();
+  console.log(res);
+  cache.set("store", res);
+  const root = ReactDOM.createRoot(document.getElementById("root"));
+  root.render(
+    <Provider store={store}>
+      <OnlineCtx>
+        <ImgProvider>
+          <HashRouter>
+            <div className="flex w-full h-full">
+              <Image />
+              <App />
+            </div>
+          </HashRouter>
+        </ImgProvider>
+      </OnlineCtx>
+    </Provider>
+  );
+})();

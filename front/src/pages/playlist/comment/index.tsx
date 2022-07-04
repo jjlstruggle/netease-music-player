@@ -1,30 +1,37 @@
 import "./index.less";
 import { ChangeEvent, useEffect, useState } from "react";
-import { Input, Button, Tooltip, Avatar, Pagination } from "antd";
+import { Input, Button, Avatar, Pagination } from "antd";
 import { AtIcon } from "../../../assets/svg";
 import { BorderlessTableOutlined } from "@ant-design/icons";
 import { getPlaylistComment } from "../../../apis/playlist";
 import { Comment as CommentType } from "../../../interface";
 import CommentComponent from "../../../components/Comment";
+import useAsyncEffect from "src/hooks/useAsyncEffect";
 const { TextArea } = Input;
 export default function Comment({ pid }: { pid: string }) {
   const [value, setValue] = useState("");
   const [comment, setComment] = useState([]);
   const [total, setTotal] = useState(0);
   const [page, setPage] = useState(1);
-  useEffect(() => {
-    getPlaylistComment(pid, page).then((res) => {
+  useAsyncEffect(async () => {
+    const cacheFunc = await getPlaylistComment(pid, page);
+    const res = await cacheFunc.getDataFromStorage();
+    if (res) {
       setComment(res.comments);
       setTotal(res.total);
-    });
+    }
+    const data = await cacheFunc.getDataFromApi();
+    setComment(data.comments);
+    setTotal(data.total);
   }, [page]);
+
   const onChange = (e: ChangeEvent<HTMLTextAreaElement>) => {
     setValue(e.target.value);
   };
 
   return (
-    <div className="comment">
-      <div className="comment-container">
+    <div className="comment overflow-hidden pb-12">
+      <div className="comment-container overflow-x-hidden overflow-y-auto mt-1 px-12">
         {comment.map((item: CommentType, index) => (
           <CommentComponent
             likeCount={item.likedCount}

@@ -1,73 +1,45 @@
-.playlist-top {
-  display: flex;
-  padding: 30px;
-}
-.playlist-top > img {
-  width: 200px;
-  height: 200px;
-  border-radius: 5px;
-  margin-right: 20px;
-}
-
 .playlist-top > div:nth-child(2) {
-  flex: 1;
+  @apply flex-1;
 }
 
 .playlist-top > div > div:nth-child(1),
 .playlist-top > div > div:nth-child(2),
 .playlist-top > div > div:nth-child(3) {
-  display: flex;
-  align-items: center;
-  margin-bottom: 10px;
+  @apply flex items-center mb-2;
 }
 
 .playlist-top > div > div:nth-child(1) > div:nth-child(1) {
-  border: 1px solid #51b8eb;
-  color: #51b8eb;
-  padding: 0 4px;
   letter-spacing: 1px;
   word-spacing: 1px;
-  font-size: 13px;
-  display: flex;
-  align-items: center;
+  @apply flex items-center text-sm px-1 text-blue-400 border border-blue-400;
 }
 
 .playlist-top > div > div:nth-child(1) > div:nth-child(2) {
-  font-weight: bold;
-  margin-left: 20px;
-  font-size: 24px;
+  @apply font-bold ml-5 text-2xl;
 }
 
 .playlist-top > div > div:nth-child(2) > img {
-  width: 32px;
-  height: 32px;
-  border-radius: 16px;
+  @apply rounded-2xl w-8 h-8;
 }
 
 .playlist-top > div > div:nth-child(2) > div {
-  color: #51b8eb;
-  margin-left: 8px;
+  @apply ml-2 text-blue-400;
   letter-spacing: 1px;
   word-spacing: 1px;
 }
 
 .playlist-top > div > div:nth-child(2) > span {
-  margin-left: 8px;
+  @apply ml-2;
   letter-spacing: 1px;
   word-spacing: 1px;
 }
 
 .playlist-top > div > div:nth-child(3) > button {
-  margin-top: 5px;
-  display: flex;
-  align-items: center;
-  font-size: 16px;
-  margin-right: 15px;
+  @apply mt-1 flex items-center mr-4 text-base;
 }
 
 .playlist-top > div > div:nth-child(3) > button > span {
-  display: flex;
-  align-items: center;
+  @apply flex items-center;
 }
 
 .playlist-top > div > div:nth-child(3) > button > span:nth-child(2) {
@@ -75,7 +47,7 @@
 }
 
 .playlist-top > div > div:nth-child(4) {
-  margin-top: 5px;
+  @apply mt-1;
   word-spacing: 2px;
   letter-spacing: 2px;
 }
@@ -85,10 +57,7 @@
 }
 
 .playlist-top > div > div:nth-child(6) {
-  display: flex;
-  justify-content: space-between;
-  width: 100%;
-  padding-right: 60px;
+  @apply flex justify-between w-full;
 }
 
 .playlist-top > div > div:nth-child(6) > div:nth-child(1) {
@@ -98,11 +67,11 @@
 }
 
 .playlist-top > div > div:nth-child(6) > div:nth-child(2) {
-  font-size: 18px;
+  @apply text-lg;
 }
 
 .playlist-content {
-  margin-top: -18px;
+  @apply -mt-4;
 }
 
 .menu-playlist .ant-menu-item-selected .ant-menu-title-content {

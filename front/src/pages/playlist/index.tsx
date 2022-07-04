@@ -21,6 +21,7 @@ import { PlaylistDetailInfo } from "../../interface";
 import { handleCount, handleTag, parseTime } from "../../utils";
 import Musiclist from "./musiclist";
 import Comment from "./comment";
+import useAsyncEffect from "src/hooks/useAsyncEffect";
 
 const { TabPane } = Tabs;
 let commendCount = 0;
@@ -51,14 +52,18 @@ export default function Playlist() {
     },
     [pid, playlistInfo]
   );
-
-  useEffect(() => {
-    getPlaylistDetail(pid).then((res) => {
-      commendCount = res.playlist.commentCount;
+  useAsyncEffect(async () => {
+    const cacheFunc = await getPlaylistDetail(pid);
+    const res = await cacheFunc.getDataFromStorage();
+    if (res) {
       setPlaylistInfo(res.playlist);
       setLoading(false);
-    });
-  }, []);
+    }
+    const data = await cacheFunc.getDataFromApi();
+    commendCount = data.playlist.commentCount;
+    setPlaylistInfo(data.playlist);
+    setLoading(false);
+  });
   useEffect(() => {
     if (!loading) {
       if (fake.current!.clientHeight > descript.current!.clientHeight) {
@@ -66,12 +71,17 @@ export default function Playlist() {
       }
     }
   }, [loading]);
+
   if (loading) return <div></div>;
 
   return (
     <div className="h-full overflow-x-hidden overflow-y-auto w-full">
-      <div className={"playlist-top"}>
-        <img src={playlistInfo.coverImgUrl} alt="图片加载失败" />
+      <div className={"playlist-top flex px-7 mr-5 w-52 h-52"}>
+        <img
+          src={playlistInfo.coverImgUrl}
+          alt="图片加载失败"
+          className="rounded"
+        />
         <div>
           <div>
             <div>歌单</div>

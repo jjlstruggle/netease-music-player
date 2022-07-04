@@ -54,8 +54,37 @@ app.whenReady().then(() => {
         store.set(key, data)
     })
 
+    ipcMain.on('setMusicStore', function (event, musicId, data) {
+        const musicStore = store.get('musicStore', [])
+        const shouldAdd = true
+        musicStore.forEach(item => {
+            if (item.musicId == musicId) {
+                item.data = data
+                shouldAdd = false
+            }
+        })
+        shouldAdd && musicStore.push({ musicId, data })
+    })
+
+    ipcMain.on("setPlaylistStore", function (event, playlistId, data) {
+        const playlistStore = store.get('playlistStore', [])
+        const shouldAdd = true
+        musicStore.forEach(item => {
+            if (item.playlistId == playlistId) {
+                item.data = data
+                shouldAdd = false
+            }
+        })
+        shouldAdd && playlistStore.push({ musicId, data })
+    })
+
     ipcMain.handle('getStore', async (event, key) => {
-        const res = store.get(key)
+        const res = store.get(key, null)
+        return res
+    })
+
+    ipcMain.handle('getAllStore', async (event, key) => {
+        const res = store.store
         return res
     })
 

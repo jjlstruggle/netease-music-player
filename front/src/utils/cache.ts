@@ -1,9 +1,12 @@
 class Cache {
-  store: {};
-  set(key, value) {
+  store;
+  constructor(defaultStore = {}) {
+    this.store = defaultStore;
+  }
+  set(key: string, value: any) {
     this.store[key] = value;
   }
-  get(key) {
+  get(key: string) {
     return this.store[key] || null;
   }
 }

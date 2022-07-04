@@ -157,7 +157,7 @@ export default function Music() {
 
   return (
     <div className="tl-music flex flex-1 bg-black flex-col opacity-70 overflow-x-hidden overflow-y-hidden">
-      <Header className="header flex items-center w-full justify-between">
+      <Header className="bg-transparent flex items-center w-full justify-between">
         <div></div>
         <div className="flex">
           <Icons />
@@ -175,9 +175,12 @@ export default function Music() {
               <div className="text-lg">{handleAr(musicInfo.ar)}</div>
             </div>
           </div>
-          <div className="lyric-box pb-8 mt-8" ref={lyricBox}>
+          <div
+            className="flex flex-col w-full overflow-y-hidden h-3/4 pb-8 mt-8"
+            ref={lyricBox}
+          >
             {lyric && lyric.isPure && (
-              <div className="tl-lyric active flex-1 items-center flex -mt-28">
+              <div className="tl-lyric text-base flex justify-center py-3 w-full active flex-1 items-center -mt-28">
                 纯音乐，请您欣赏
               </div>
             )}
@@ -186,7 +189,9 @@ export default function Music() {
               lyric.musicLyric.map((ly: string, index) => (
                 <div
                   className={
-                    index === curIndex - 1 ? "tl-lyric active" : "tl-lyric"
+                    index === curIndex - 1
+                      ? "tl-lyric text-base flex justify-center py-3 w-full active duration-200"
+                      : "tl-lyric text-base flex justify-center py-3 w-full duration-200"
                   }
                   key={index}
                 >

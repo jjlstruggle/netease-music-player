@@ -30,13 +30,17 @@ const MvC = () => {
       </div>
       <Row gutter={[32, 32]} style={{ marginBottom: 30 }}>
         {mv.map((item: Mv, index) => (
-          <Col key={index} className="recommand-mv" span={6}>
+          <Col key={index} className="recommand-mv relative" span={6}>
             <Link to={`/mv?mid=${item.id}`}>
-              <div className="play-count">
+              <div className="play-count absolute top-1 text-white text-sm flex items-center">
                 <SanJiaoIcon style={{ minWidth: 15, minHeight: 15 }} />
                 {handleCount(item.playCount)}
               </div>
-              <img src={item.picUrl} alt="图片加载失败" />
+              <img
+                src={item.picUrl}
+                alt="图片加载失败"
+                className="w-full rounded-lg h-32"
+              />
               <div children={item.name} className="playlist-name" />
             </Link>
           </Col>

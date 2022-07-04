@@ -3,16 +3,15 @@ import $ from "../index";
 export const getMusicUrl = async (id: string, br?: number) => {
   let p;
   if (br) {
-    p = await $.get(`/song/url?id=${id}&br=${br}`);
+    p = await $.get(`/song/url?id=${id}&br=${br}`, {}, false);
   } else {
-    p = await $.get(`/song/download/url?id=${id}`);
+    p = await $.get(`/song/download/url?id=${id}`, {}, false);
   }
-  if (!p.data.url) {
-    p = await $.get(`/song/url?id=${id}`);
-    return {
-      data: p.data[0],
-    };
-  }
+  return p;
+};
+
+export const getMusicDownLoadUrl = async (id: string) => {
+  const p = await $.get(`/song/url?id=${id}`, {}, false);
   return p;
 };
 

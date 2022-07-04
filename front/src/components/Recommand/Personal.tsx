@@ -30,11 +30,15 @@ const PersonalizeC = () => {
       </div>
       <Row gutter={[32, 32]} style={{ marginBottom: 30 }}>
         {personalized.map((personalized: Personalize, index) => (
-          <Col key={index} className="recommand-personalized" span={8}>
+          <Col key={index} className="recommand-personalized relative" span={8}>
             <Link to={`/mv?mid=${personalized.id}`}>
-              <img src={personalized.picUrl} alt="图片加载失败" />
+              <img
+                src={personalized.picUrl}
+                alt="图片加载失败"
+                className="w-full rounded-lg h-32"
+              />
               <div children={personalized.name} className="playlist-name" />
-              <div className="icon flex-center-center">
+              <div className="absolute top-0 left-0 translate-x-7 translate-y-2 w-7 h-7 rounded-2xl text-2xl text-blue-400 tl-flex-cc">
                 <CaretRightOutlined />
               </div>
             </Link>

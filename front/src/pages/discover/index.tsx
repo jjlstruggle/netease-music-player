@@ -1,6 +1,5 @@
 import { Tabs } from "antd";
 import "./index.less";
-import { useCallback, useEffect, useState } from "react";
 import useLazy from "src/hooks/useLazy";
 import { Route, Routes, Navigate, useNavigate } from "react-router-dom";
 

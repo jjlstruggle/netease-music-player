@@ -15,7 +15,7 @@ import {
   DownloadOutlined,
   SoundFilled,
 } from "@ant-design/icons";
-import { getMusicUrl } from "../../../apis/music";
+import { getMusicDownLoadUrl, getMusicUrl } from "../../../apis/music";
 import {
   updateCurrentSongs,
   updateSongsList,
@@ -23,6 +23,8 @@ import {
 } from "../../../models/slice/musicInfo";
 import useLazy from "src/hooks/useLazy";
 import { useDispatch } from "react-redux";
+import useAsyncEffect from "src/hooks/useAsyncEffect";
+import storage from "src/utils/storage";
 
 const LazyHightLight = useLazy(import("react-highlight-words"));
 
@@ -148,17 +150,22 @@ function Musiclist({
       ...getColumnSearchProps(),
     },
   ];
-
-  useEffect(() => {
+  useAsyncEffect(async () => {
     let ids = "";
     musicIds.forEach((idObj) => {
       ids += idObj.id + ",";
     });
-    getMusicListInfo(ids.slice(0, ids.length - 1)).then((res) => {
+    const cacheFunc = await getMusicListInfo(ids.slice(0, ids.length - 1));
+    const res = await cacheFunc.getDataFromStorage();
+    if (res) {
       updateSongs(res.songs);
       setLoading(false);
-    });
-  }, []);
+    }
+    const data = await cacheFunc.getDataFromApi();
+    updateSongs(data.songs);
+    setLoading(false);
+  });
+
   const data = songs!.map((item, index) => ({
     index: (
       <div className="flex-side-center">
@@ -187,9 +194,25 @@ function Musiclist({
       onRow={(record: { info: MusicInfo }, index) => {
         return {
           onDoubleClick: async () => {
+            let musicUrlInfo;
             setCurIndex(index);
             const { id } = record.info;
-            const musicUrlInfo = await getMusicUrl(id);
+            const cacheFunc = await getMusicUrl(id);
+            const res = await cacheFunc.getDataFromStorage();
+            if (res) {
+              musicUrlInfo = res;
+            } else {
+              const data = await cacheFunc.getDataFromApi();
+              musicUrlInfo = data;
+              if (data.data.url) {
+                storage.setMusic(id, data);
+              }
+              if (!data.data.url) {
+                const $data = await getMusicDownLoadUrl(id);
+                musicUrlInfo = (await $data.getDataFromApi()).data[0];
+                storage.setMusic(id, data);
+              }
+            }
             let info = Object.assign({}, record.info, {
               musicUrlInfo: musicUrlInfo.data,
             });
