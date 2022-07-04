@@ -4,6 +4,8 @@ const Store = require("electron-store");
 const store = new Store({
     cwd: "app-cache",
 });
+
+
 function createWindow() {
     // 创建一个浏览器窗口.
     let window = new BrowserWindow({
@@ -63,7 +65,8 @@ app.whenReady().then(() => {
                 shouldAdd = false
             }
         })
-        shouldAdd && musicStore.push({ musicId, data })
+        shouldAdd && musicStore.push({ musicId, data, lyric: null, simi: null })
+        store.set('musicStore', musicStore)
     })
 
     ipcMain.on("setPlaylistStore", function (event, playlistId, data) {
@@ -76,6 +79,32 @@ app.whenReady().then(() => {
             }
         })
         shouldAdd && playlistStore.push({ musicId, data })
+        store.set('playlistStore', musicStore)
+    })
+
+    ipcMain.on('setMusicLyricStore', function (event, musicId, data) {
+        const musicStore = store.get('musicStore', [])
+        const shouldAdd = true
+        musicStore.forEach(item => {
+            if (item.musicId == musicId) {
+                item.lyric = data
+                shouldAdd = false
+            }
+        })
+        shouldAdd && musicStore.push({ musicId, lyric: data, data: null, simi: null })
+        store.set('musicStore', musicStore)
+    })
+    ipcMain.on('setMusicSimiStore', function (event, musicId, data) {
+        const musicStore = store.get('musicStore', [])
+        const shouldAdd = true
+        musicStore.forEach(item => {
+            if (item.musicId == musicId) {
+                item.simi = data
+                shouldAdd = false
+            }
+        })
+        shouldAdd && musicStore.push({ musicId, data: null, simi: data, lyric: null })
+        store.set('musicStore', musicStore)
     })
 
     ipcMain.handle('getStore', async (event, key) => {
@@ -91,6 +120,18 @@ app.whenReady().then(() => {
     ipcMain.handle('windowIsMaximized', async () => {
         const res = window.isMaximized()
         return res
+    })
+
+    ipcMain.handle('getMusicData', function (event, musicId) {
+        const musicStore = store.get('musicStore', [])
+        if (!musicStore.length) return null
+        return musicStore.filter(item => item.musicId == musicId)[0] || null
+    })
+
+    ipcMain.handle('getPlaylistData', function (event, playlistId) {
+        const playlistStore = store.get('playlistStore', [])
+        if (!playlistStore.length) return null
+        return playlistStore.filter(item => item.playlistId == playlistId)[0] || null
     })
 
     ipcMain.on("max", function () {

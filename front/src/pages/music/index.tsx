@@ -23,6 +23,8 @@ import {
 } from "@ant-design/icons";
 import { Card } from "antd";
 import QueueAnim from "rc-queue-anim";
+import useAsyncEffect from "src/hooks/useAsyncEffect";
+import storage from "src/utils/storage";
 const { Meta } = Card;
 
 const handleLyric = (lyric) => {
@@ -113,14 +115,28 @@ export default function Music() {
     imgCtx.setStore(img);
   }, []);
   const musicInfo = useSelector((state: ReduxState) => state.musicInfo.curSong);
-  useEffect(() => {
-    getMusicLyric(musicInfo.id).then((res) => {
+  useAsyncEffect(async () => {
+    const cacheFunc = await getMusicLyric(musicInfo.id);
+    let res = await storage.getMusicData(musicInfo.id);
+    if (res && res.lyric) {
       setLyric(handleLyric(res.lrc.lyric));
-    });
-    getSimilarMuisc(musicInfo.id).then((res) => {
-      setSimi(res.songs);
-    });
-  }, []);
+    } else {
+      res = await cacheFunc.getDataFromApi();
+      setLyric(res.lrc.lyric);
+    }
+    storage.setMusicLyric(musicInfo.id, res);
+  });
+  useAsyncEffect(async () => {
+    const cacheFunc = await getSimilarMuisc(musicInfo.id);
+    let res = await storage.getMusicData(musicInfo.id);
+    if (res && res.simi) {
+      setLyric(res.songs);
+    } else {
+      res = await cacheFunc.getDataFromApi();
+      setLyric(res.songs);
+    }
+    storage.setMusicSimi(musicInfo.id, res);
+  });
   useEffect(() => {
     if (!lyric) return;
     const { $audio } = window;

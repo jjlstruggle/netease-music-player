@@ -26,11 +26,11 @@ export const checkMusic = async (id: number, br?: number) => {
 };
 
 export const getMusicLyric = async (id: string) => {
-  const p = await $.get(`/lyric?id=${id}`);
+  const p = await $.get(`/lyric?id=${id}`, {}, false);
   return p;
 };
 
 export const getSimilarMuisc = async (id: string) => {
-  const p = await $.get(`/simi/song?id=${id}`);
+  const p = await $.get(`/simi/song?id=${id}`, {}, false);
   return p;
 };

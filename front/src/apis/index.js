@@ -18,7 +18,7 @@ class Request {
         return res.data
     }
     async getDataFromStorage(url) {
-        return await cache.get(url)
+        return await storage.get(url)
     }
     async post(...args) {
         return await axios.post(...args)
@@ -26,7 +26,7 @@ class Request {
     async get(...args) {
         let that = this
         return {
-            getDataFromStorage: () => that.getDataFromStorage(...args),
+            getDataFromStorage: (cache = true) => cache && that.getDataFromStorage(...args),
             getDataFromApi: () => that.getDataFromApi(...args)
         }
     }

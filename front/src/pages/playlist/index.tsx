@@ -75,12 +75,12 @@ export default function Playlist() {
   if (loading) return <div></div>;
 
   return (
-    <div className="h-full overflow-x-hidden overflow-y-auto w-full">
-      <div className={"playlist-top flex px-7 mr-5 w-52 h-52"}>
+    <div className="h-full overflow-x-hidden overflow-y-auto w-full mt-5">
+      <div className={"playlist-top flex"}>
         <img
           src={playlistInfo.coverImgUrl}
           alt="图片加载失败"
-          className="rounded"
+          className="rounded w-52 h-52 mr-5"
         />
         <div>
           <div>

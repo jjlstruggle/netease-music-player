@@ -18,4 +18,18 @@ export default {
   async setPlaylist(playlistId: string, data: any) {
     ipcRenderer.send("setPlaylistStore", playlistId, data);
   },
+  async getMusicData(musicId: string) {
+    const res = await ipcRenderer.invoke("getMusicData", musicId);
+    return res;
+  },
+  async getPlaylistData(playlistId: string) {
+    const res = await ipcRenderer.invoke("getPlaylistData", playlistId);
+    return res;
+  },
+  async setMusicLyric(musicId: string, lyric: any) {
+    ipcRenderer.send("setMusicLyricStore", musicId, lyric);
+  },
+  async setMusicSimi(musicId: string, simi: any) {
+    ipcRenderer.send("setMusicSimiStore", musicId, simi);
+  },
 };

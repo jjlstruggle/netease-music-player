@@ -26,8 +26,6 @@ import { useDispatch } from "react-redux";
 import useAsyncEffect from "src/hooks/useAsyncEffect";
 import storage from "src/utils/storage";
 
-const LazyHightLight = useLazy(import("react-highlight-words"));
-
 interface musicIdsObject {
   id: string;
 }
@@ -123,14 +121,17 @@ function Musiclist({
         setTimeout(() => searchInput.current!.select(), 100);
       }
     },
-    render: (text: string) => (
-      <LazyHightLight
-        highlightStyle={{ backgroundColor: "#ffc069", padding: 0 }}
-        searchWords={[search.searchText]}
-        autoEscape
-        textToHighlight={text ? text.toString() : ""}
-      />
-    ),
+    render: (text: string) => {
+      const LazyHightLight = useLazy(import("react-highlight-words"));
+      return (
+        <LazyHightLight
+          highlightStyle={{ backgroundColor: "#ffc069", padding: 0 }}
+          searchWords={[search.searchText]}
+          autoEscape
+          textToHighlight={text ? text.toString() : ""}
+        />
+      );
+    },
   });
 
   const columns = [
@@ -197,30 +198,27 @@ function Musiclist({
             let musicUrlInfo;
             setCurIndex(index);
             const { id } = record.info;
-            const cacheFunc = await getMusicUrl(id);
-            const res = await cacheFunc.getDataFromStorage();
+            const res = await storage.getMusicData(id);
             if (res) {
               musicUrlInfo = res;
             } else {
+              const cacheFunc = await getMusicUrl(id);
               const data = await cacheFunc.getDataFromApi();
-              musicUrlInfo = data;
               if (data.data.url) {
-                storage.setMusic(id, data);
-              }
-              if (!data.data.url) {
+                musicUrlInfo = data.data;
+              } else {
                 const $data = await getMusicDownLoadUrl(id);
                 musicUrlInfo = (await $data.getDataFromApi()).data[0];
-                storage.setMusic(id, data);
               }
             }
+            storage.setMusic(id, musicUrlInfo);
             let info = Object.assign({}, record.info, {
-              musicUrlInfo: musicUrlInfo.data,
+              musicUrlInfo,
             });
+
             dispatch(updateCurrentSongs(info));
             dispatch(updateSongsList(songs));
-            // @ts-ignore
             window.$audio.src = info.musicUrlInfo.url;
-            // @ts-ignore
             window.$audio.play();
           },
         };
