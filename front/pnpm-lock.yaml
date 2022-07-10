@@ -46,7 +46,6 @@ specifiers:
   prompts: ^2.4.2
   rc-queue-anim: ^2.0.0
   react: ^18.2.0
-  react-app-polyfill: ^3.0.0
   react-dev-utils: ^12.0.1
   react-dom: ^18.2.0
   react-highlight-words: ^0.18.0
@@ -86,7 +85,6 @@ dependencies:
   prompts: 2.4.2
   rc-queue-anim: 2.0.0_biqbaboplfbrettd7655fr4n2y
   react: 18.2.0
-  react-app-polyfill: 3.0.0
   react-dev-utils: 12.0.1_3o2jfq6vfqxns3sz6wn2nnc3ei
   react-dom: 18.2.0_react@18.2.0
   react-highlight-words: 0.18.0_react@18.2.0
@@ -2507,10 +2505,6 @@ packages:
     engines: {node: '>=8'}
     dev: false
 
-  /asap/2.0.6:
-    resolution: {integrity: sha512-BSHWgDSAiKs50o2Re8ppvp3seVHXSRM44cdSsT9FfNEUUZLOGWVCsiWaRPWM1Znn+mqZ1OfVZ3z3DWEzSp7hRA==}
-    dev: false
-
   /async-validator/4.2.5:
     resolution: {integrity: sha512-7HhHjtERjqlNbZtqNqy2rckN/SpOOlmDliet+lP7k+eKZEjPk3DgyeU9lIXLdeLz0uBbbVp+9Qdow9wJWgwwfg==}
     dev: false
@@ -3077,11 +3071,6 @@ packages:
     resolution: {integrity: sha512-t6u7H4Ff/yZNk+zqTr74UjCcZ3k8ApBryeLLV4rYQd9aF3gqmjjGjjR44ENfeBMH8VVvSynIjAJ0mUuFhzQtrA==}
     requiresBuild: true
     dev: true
-
-  /core-js/3.23.2:
-    resolution: {integrity: sha512-ELJOWxNrJfOH/WK4VJ3Qd+fOqZuOuDNDJz0xG6Bt4mGg2eO/UT9CljCrbqDGovjLKUrGajEEBcoTOc0w+yBYeQ==}
-    requiresBuild: true
-    dev: false
 
   /core-util-is/1.0.3:
     resolution: {integrity: sha512-ZQBvi1DcpJ4GDqanjucZ2Hj3wEO5pZDS89BWbkcrvdxksJorwUDDZamX9ldFkp9aw2lmBDLgkObEA4DWNJ9FYQ==}
@@ -6221,12 +6210,6 @@ packages:
     engines: {node: '>=0.4.0'}
     dev: true
 
-  /promise/8.1.0:
-    resolution: {integrity: sha512-W04AqnILOL/sPRXziNicCjSNRruLAuIHEOVBazepu0545DDNGYHz7ar9ZgZ1fMU8/MA4mVxp5rkBWRi6OXIy3Q==}
-    dependencies:
-      asap: 2.0.6
-    dev: false
-
   /prompts/2.4.2:
     resolution: {integrity: sha512-NxNv/kLguCA7p3jE8oL2aEBsrJWgAakBpgmgK6lpPWV+WuOmY6r2/zbAVnP+T8bQlA0nzHXSJSJW0Hq7ylaD2Q==}
     engines: {node: '>= 6'}
@@ -6846,18 +6829,6 @@ packages:
       rc-util: 5.21.5_biqbaboplfbrettd7655fr4n2y
       react: 18.2.0
       react-dom: 18.2.0_react@18.2.0
-    dev: false
-
-  /react-app-polyfill/3.0.0:
-    resolution: {integrity: sha512-sZ41cxiU5llIB003yxxQBYrARBqe0repqPTTYBTmMqTz9szeBbE37BehCE891NZsmdZqqP+xWKdT3eo3vOzN8w==}
-    engines: {node: '>=14'}
-    dependencies:
-      core-js: 3.23.2
-      object-assign: 4.1.1
-      promise: 8.1.0
-      raf: 3.4.1
-      regenerator-runtime: 0.13.9
-      whatwg-fetch: 3.6.2
     dev: false
 
   /react-dev-utils/12.0.1_3o2jfq6vfqxns3sz6wn2nnc3ei:
@@ -8208,10 +8179,6 @@ packages:
     resolution: {integrity: sha512-OqedPIGOfsDlo31UNwYbCFMSaO9m9G/0faIHj5/dZFDMFqPTcx6UwqyOy3COEaEOg/9VsGIpdqn62W5KhoKSpg==}
     engines: {node: '>=0.8.0'}
     dev: true
-
-  /whatwg-fetch/3.6.2:
-    resolution: {integrity: sha512-bJlen0FcuU/0EMLrdbJ7zOnW6ITZLrZMIarMUVmdKtsGvZna8vxKYaexICWPfZ8qwf9fzNq+UEIZrnSaApt6RA==}
-    dev: false
 
   /whatwg-url/7.1.0:
     resolution: {integrity: sha512-WUu7Rg1DroM7oQvGWfOiAK21n74Gg+T4elXEQYkOhtyLeWiJFoOGLXPKI/9gzIie9CtwVLm8wtw6YJdKyxSjeg==}

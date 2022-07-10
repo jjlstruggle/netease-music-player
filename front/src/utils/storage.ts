@@ -27,9 +27,9 @@ export default {
     return res;
   },
   async setMusicLyric(musicId: string, lyric: any) {
-    ipcRenderer.send("setMusicLyricStore", musicId, lyric);
+    ipcRenderer.send("setMusicStoreData", musicId, "lyric", lyric);
   },
   async setMusicSimi(musicId: string, simi: any) {
-    ipcRenderer.send("setMusicSimiStore", musicId, simi);
+    ipcRenderer.send("setMusicStoreData", musicId, "simi", simi);
   },
 };

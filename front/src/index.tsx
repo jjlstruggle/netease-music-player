@@ -1,7 +1,6 @@
 import { HashRouter } from "react-router-dom";
 import { Provider } from "react-redux";
 // @ts-ignore
-import test from "./assets/audio/test.mp3";
 import ReactDOM from "react-dom/client";
 import "./index.css";
 import App from "./App";
@@ -12,7 +11,7 @@ import OnlineCtx from "./context/online";
 import { useContext } from "react";
 import storage from "./utils/storage";
 import cache from "./utils/cache";
-window["$audio"] = new Audio(test);
+window["$audio"] = new Audio();
 
 const Image = () => {
   const imgCtx = useContext(Ctx);

@@ -5,7 +5,7 @@ import {
   PlayerActions,
 } from "../../../interface";
 import { Table, Input, Space, Button, InputRef } from "antd";
-import { useEffect, useRef, useState, Ref } from "react";
+import { useRef, useState, Ref } from "react";
 import "./index.less";
 import { fomate, handleAr, parseDt } from "../../../utils";
 

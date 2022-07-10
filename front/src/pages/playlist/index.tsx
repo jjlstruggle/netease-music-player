@@ -22,6 +22,7 @@ import { handleCount, handleTag, parseTime } from "../../utils";
 import Musiclist from "./musiclist";
 import Comment from "./comment";
 import useAsyncEffect from "src/hooks/useAsyncEffect";
+import storage from "src/utils/storage";
 
 const { TabPane } = Tabs;
 let commendCount = 0;
@@ -54,15 +55,17 @@ export default function Playlist() {
   );
   useAsyncEffect(async () => {
     const cacheFunc = await getPlaylistDetail(pid);
-    const res = await cacheFunc.getDataFromStorage();
+    const res = await storage.getPlaylistData(pid);
     if (res) {
       setPlaylistInfo(res.playlist);
       setLoading(false);
+    } else {
+      const data = await cacheFunc.getDataFromApi();
+      storage.setPlaylist(pid, data);
+      commendCount = data.playlist.commentCount;
+      setPlaylistInfo(data.playlist);
+      setLoading(false);
     }
-    const data = await cacheFunc.getDataFromApi();
-    commendCount = data.playlist.commentCount;
-    setPlaylistInfo(data.playlist);
-    setLoading(false);
   });
   useEffect(() => {
     if (!loading) {

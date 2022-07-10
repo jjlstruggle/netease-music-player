@@ -82,30 +82,45 @@ app.whenReady().then(() => {
         store.set('playlistStore', musicStore)
     })
 
-    ipcMain.on('setMusicLyricStore', function (event, musicId, data) {
+
+    ipcMain.on('setMusicStoreData', function (event, musicId, key, data) {
         const musicStore = store.get('musicStore', [])
         const shouldAdd = true
         musicStore.forEach(item => {
             if (item.musicId == musicId) {
-                item.lyric = data
+                item[key] = data
                 shouldAdd = false
             }
         })
-        shouldAdd && musicStore.push({ musicId, lyric: data, data: null, simi: null })
+        shouldAdd && musicStore.push(Object.assign(
+            {
+                musicId,
+                data: null,
+                simi: null,
+                lyric: null
+            }, { key, data }))
         store.set('musicStore', musicStore)
     })
-    ipcMain.on('setMusicSimiStore', function (event, musicId, data) {
-        const musicStore = store.get('musicStore', [])
+
+    ipcMain.on('setMusicStoreData', function (event, playlistId, key, data) {
+        const playlistIdStore = store.get('playlistStore', [])
         const shouldAdd = true
-        musicStore.forEach(item => {
-            if (item.musicId == musicId) {
-                item.simi = data
+        playlistIdStore.forEach(item => {
+            if (item.playlistId == playlistId) {
+                item[key] = data
                 shouldAdd = false
             }
         })
-        shouldAdd && musicStore.push({ musicId, data: null, simi: data, lyric: null })
-        store.set('musicStore', musicStore)
+        shouldAdd && playlistIdStore.push(Object.assign(
+            {
+                playlistIdId,
+                data: null,
+                simi: null,
+                lyric: null
+            }, { key, data }))
+        store.set('playlistIdStore', musicStore)
     })
+
 
     ipcMain.handle('getStore', async (event, key) => {
         const res = store.get(key, null)

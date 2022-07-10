@@ -7,6 +7,7 @@ import hasNet from "src/utils/net";
 
 const Banner = () => {
   const [banner, setBanner] = useState([]);
+
   useAsyncEffect(async () => {
     const cacheFunction = await getBanner();
     const cacheRes = await cacheFunction.getDataFromStorage();

@@ -22,7 +22,6 @@
     "prompts": "^2.4.2",
     "rc-queue-anim": "^2.0.0",
     "react": "^18.2.0",
-    "react-app-polyfill": "^3.0.0",
     "react-dev-utils": "^12.0.1",
     "react-dom": "^18.2.0",
     "react-highlight-words": "^0.18.0",
@@ -33,7 +32,7 @@
     "semver": "^7.3.5"
   },
   "scripts": {
-    "dev": "pnpm run ele",
+    "dev": "concurrently \"npx cross-env BROWSER=none pnpm start \" \"wait-on http://localhost:3000 && pnpm run ele\"",
     "build": "npx cross-env GENERATE_SOURCEMAP=false node scripts/build.js",
     "ele": "npx cross-env NODE_ENV=development nodemon --watch ./main.js --exec \"electron .\"",
     "start": "node scripts/start.js"

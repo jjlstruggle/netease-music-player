@@ -2,7 +2,7 @@
  * axios全局配置部分
  */
 
-import axios from "axios";
+import axios, { AxiosError } from "axios";
 import cache from "src/utils/cache";
 import storage from '../utils/storage'
 axios.defaults.baseURL = "http://121.40.19.111:3000";
@@ -11,11 +11,20 @@ axios.defaults.withCredentials = true
 
 class Request {
     async getDataFromApi(url, options = {}, cache = true) {
-        const res = await axios.get(url, options)
-        if (cache) {
-            storage.set(url, res.data)
+        try {
+            const res = await axios.get(url, options)
+            if (cache) {
+                storage.set(url, res.data)
+            }
+            return res.data
+        } catch (e) {
+            return {
+                code: e.response.status,
+                data: null,
+                info: e.response.statusText
+            }
         }
-        return res.data
+
     }
     async getDataFromStorage(url) {
         return await storage.get(url)
