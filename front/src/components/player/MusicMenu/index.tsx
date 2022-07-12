@@ -79,13 +79,12 @@ const MusicMenu = memo(() => {
                 if (res) {
                   musicUrlInfo = res;
                 } else {
-                  const cacheFunc = await getMusicUrl(id);
-                  const data = await cacheFunc.getDataFromApi();
+                  const data = await getMusicUrl(id);
                   if (data.data.url) {
                     musicUrlInfo = data.data;
                   } else {
                     const $data = await getMusicDownLoadUrl(id);
-                    musicUrlInfo = (await $data.getDataFromApi()).data[0];
+                    musicUrlInfo = $data.data[0];
                   }
                 }
                 storage.setMusic(id, musicUrlInfo);

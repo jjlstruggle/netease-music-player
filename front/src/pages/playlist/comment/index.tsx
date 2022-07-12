@@ -14,15 +14,9 @@ export default function Comment({ pid }: { pid: string }) {
   const [total, setTotal] = useState(0);
   const [page, setPage] = useState(1);
   useAsyncEffect(async () => {
-    const cacheFunc = await getPlaylistComment(pid, page);
-    const res = await cacheFunc.getDataFromStorage();
-    if (res) {
-      setComment(res.comments);
-      setTotal(res.total);
-    }
-    const data = await cacheFunc.getDataFromApi();
-    setComment(data.comments);
-    setTotal(data.total);
+    const res = await getPlaylistComment(pid, page);
+    setComment(res.comments);
+    setTotal(res.total);
   }, [page]);
 
   const onChange = (e: ChangeEvent<HTMLTextAreaElement>) => {

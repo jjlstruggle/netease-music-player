@@ -54,18 +54,10 @@ export default function Playlist() {
     [pid, playlistInfo]
   );
   useAsyncEffect(async () => {
-    const cacheFunc = await getPlaylistDetail(pid);
-    const res = await storage.getPlaylistData(pid);
-    if (res) {
-      setPlaylistInfo(res.playlist);
-      setLoading(false);
-    } else {
-      const data = await cacheFunc.getDataFromApi();
-      storage.setPlaylist(pid, data);
-      commendCount = data.playlist.commentCount;
-      setPlaylistInfo(data.playlist);
-      setLoading(false);
-    }
+    const data = await getPlaylistDetail(pid);
+    commendCount = data.playlist.commentCount;
+    setPlaylistInfo(data.playlist);
+    setLoading(false);
   });
   useEffect(() => {
     if (!loading) {

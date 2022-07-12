@@ -5,7 +5,6 @@ const store = new Store({
     cwd: "app-cache",
 });
 
-
 function createWindow() {
     // 创建一个浏览器窗口.
     let window = new BrowserWindow({
@@ -72,14 +71,27 @@ app.whenReady().then(() => {
     ipcMain.on("setPlaylistStore", function (event, playlistId, data) {
         const playlistStore = store.get('playlistStore', [])
         const shouldAdd = true
-        musicStore.forEach(item => {
+        playlistStore.forEach(item => {
             if (item.playlistId == playlistId) {
                 item.data = data
                 shouldAdd = false
             }
         })
-        shouldAdd && playlistStore.push({ musicId, data })
-        store.set('playlistStore', musicStore)
+        shouldAdd && playlistStore.push({ playlistId, data, comment: [] })
+        store.set('playlistStore', playlistStore)
+    })
+
+    ipcMain.on("setPlaylistCommentStore", function (event, playlistId, page, data) {
+        const playlistStore = store.get('playlistStore', [])
+        const shouldAdd = true
+        playlistStore.forEach(item => {
+            if (item.playlistId == playlistId) {
+                item.comment[page]
+                shouldAdd = false
+            }
+        })
+        shouldAdd && playlistStore.push({ playlistStore, data })
+        store.set('playlistStore', playlistStore)
     })
 
 

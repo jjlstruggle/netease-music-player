@@ -9,15 +9,8 @@ const Banner = () => {
   const [banner, setBanner] = useState([]);
 
   useAsyncEffect(async () => {
-    const cacheFunction = await getBanner();
-    const cacheRes = await cacheFunction.getDataFromStorage();
-    if (cacheRes) {
-      setBanner(cacheRes.banners);
-    }
-    if (hasNet()) {
-      const apiRes = await cacheFunction.getDataFromApi();
-      setBanner(apiRes.banners);
-    }
+    const data = await getBanner();
+    setBanner(data.banners);
   });
 
   return (

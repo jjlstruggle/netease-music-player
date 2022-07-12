@@ -11,7 +11,6 @@
     "antd": "^4.21.3",
     "axios": "^0.27.2",
     "bfj": "^7.0.2",
-    "browserslist": "^4.18.1",
     "camelcase": "^6.2.1",
     "dayjs": "^1.11.3",
     "dotenv": "^10.0.0",
@@ -36,18 +35,6 @@
     "build": "npx cross-env GENERATE_SOURCEMAP=false node scripts/build.js",
     "ele": "npx cross-env NODE_ENV=development nodemon --watch ./main.js --exec \"electron .\"",
     "start": "node scripts/start.js"
-  },
-  "browserslist": {
-    "production": [
-      ">0.2%",
-      "not dead",
-      "not op_mini all"
-    ],
-    "development": [
-      "last 1 chrome version",
-      "last 1 firefox version",
-      "last 1 safari version"
-    ]
   },
   "babel": {
     "presets": [
@@ -104,5 +91,17 @@
     "webpack-manifest-plugin": "^5.0.0",
     "webpackbar": "^5.0.2",
     "workbox-webpack-plugin": "^6.5.3"
+  },
+  "browserslist": {
+    "production": [
+      ">0.2%",
+      "not dead",
+      "not op_mini all"
+    ],
+    "development": [
+      "last 1 chrome version",
+      "last 1 firefox version",
+      "last 1 safari version"
+    ]
   }
 }

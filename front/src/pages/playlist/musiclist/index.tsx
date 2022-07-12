@@ -156,13 +156,7 @@ function Musiclist({
     musicIds.forEach((idObj) => {
       ids += idObj.id + ",";
     });
-    const cacheFunc = await getMusicListInfo(ids.slice(0, ids.length - 1));
-    const res = await cacheFunc.getDataFromStorage();
-    if (res) {
-      updateSongs(res.songs);
-      setLoading(false);
-    }
-    const data = await cacheFunc.getDataFromApi();
+    const data = await getMusicListInfo(ids.slice(0, ids.length - 1));
     updateSongs(data.songs);
     setLoading(false);
   });
@@ -198,20 +192,14 @@ function Musiclist({
             let musicUrlInfo;
             setCurIndex(index);
             const { id } = record.info;
-            const res = await storage.getMusicData(id);
-            if (res) {
-              musicUrlInfo = res;
+
+            const data = await getMusicUrl(id);
+            if (data.data.url) {
+              musicUrlInfo = data.data;
             } else {
-              const cacheFunc = await getMusicUrl(id);
-              const data = await cacheFunc.getDataFromApi();
-              if (data.data.url) {
-                musicUrlInfo = data.data;
-              } else {
-                const $data = await getMusicDownLoadUrl(id);
-                musicUrlInfo = (await $data.getDataFromApi()).data[0];
-              }
+              const $data = await getMusicDownLoadUrl(id);
+              musicUrlInfo = $data.data[0];
             }
-            storage.setMusic(id, musicUrlInfo);
             let info = Object.assign({}, record.info, {
               musicUrlInfo,
             });

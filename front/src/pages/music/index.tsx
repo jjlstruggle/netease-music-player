@@ -116,26 +116,12 @@ export default function Music() {
   }, []);
   const musicInfo = useSelector((state: ReduxState) => state.musicInfo.curSong);
   useAsyncEffect(async () => {
-    const cacheFunc = await getMusicLyric(musicInfo.id);
-    let res = await storage.getMusicData(musicInfo.id);
-    if (res && res.lyric) {
-      setLyric(handleLyric(res.lrc.lyric));
-    } else {
-      res = await cacheFunc.getDataFromApi();
-      setLyric(res.lrc.lyric);
-    }
-    storage.setMusicLyric(musicInfo.id, res);
+    const data = await getMusicLyric(musicInfo.id);
+    setLyric(data.lrc.lyric);
   });
   useAsyncEffect(async () => {
-    const cacheFunc = await getSimilarMuisc(musicInfo.id);
-    let res = await storage.getMusicData(musicInfo.id);
-    if (res && res.simi) {
-      setLyric(res.songs);
-    } else {
-      res = await cacheFunc.getDataFromApi();
-      setLyric(res.songs);
-    }
-    storage.setMusicSimi(musicInfo.id, res);
+    const data = await getSimilarMuisc(musicInfo.id);
+    setLyric(data.songs);
   });
   useEffect(() => {
     if (!lyric) return;

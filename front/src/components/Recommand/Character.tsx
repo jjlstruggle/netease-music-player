@@ -12,15 +12,8 @@ import hasNet from "src/utils/net";
 const Charactar = () => {
   const [recommand, setRecommand] = useState(new Array(10));
   useAsyncEffect(async () => {
-    const cacheFunction = await getRecommandPlaylist();
-    const cacheRes = await cacheFunction.getDataFromStorage();
-    if (cacheRes) {
-      setRecommand(cacheRes.result);
-    }
-    if (hasNet()) {
-      const apiRes = await cacheFunction.getDataFromApi();
-      setRecommand(apiRes.result);
-    }
+    const data = await getRecommandPlaylist();
+    setRecommand(data.result);
   });
 
   return (

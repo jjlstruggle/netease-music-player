@@ -11,15 +11,8 @@ import hasNet from "src/utils/net";
 const PersonalizeC = () => {
   const [personalized, setpersonalized] = useState(new Array(3));
   useAsyncEffect(async () => {
-    const cacheFunction = await getPersonalized();
-    const cacheRes = await cacheFunction.getDataFromStorage();
-    if (cacheRes) {
-      setpersonalized(cacheRes.result);
-    }
-    if (hasNet()) {
-      const apiRes = await cacheFunction.getDataFromApi();
-      setpersonalized(apiRes.result);
-    }
+    const data = await getPersonalized();
+    setpersonalized(data.result);
   });
 
   return (

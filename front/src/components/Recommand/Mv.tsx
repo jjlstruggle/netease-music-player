@@ -11,15 +11,8 @@ import hasNet from "src/utils/net";
 const MvC = () => {
   const [mv, setMv] = useState(new Array(4));
   useAsyncEffect(async () => {
-    const cacheFunction = await getMv();
-    const cacheRes = await cacheFunction.getDataFromStorage();
-    if (cacheRes) {
-      setMv(cacheRes.result);
-    }
-    if (hasNet()) {
-      const apiRes = await cacheFunction.getDataFromApi();
-      setMv(apiRes.result);
-    }
+    const data = await getMv();
+    setMv(data.result);
   });
 
   return (
