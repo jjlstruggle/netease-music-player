@@ -16,7 +16,7 @@ function createWindow() {
             nodeIntegration: true,
             nodeIntegrationInWorker: false,
             contextIsolation: false,
-            preload: __dirname + '\\preload.js'
+            preload: __dirname + '/preload.js'
         },
         frame: false,
     });
